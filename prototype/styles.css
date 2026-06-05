@@ -532,3 +532,24 @@ a { color: inherit; }
 .opp-tag { display:inline-flex; align-items:center; font-size:11.5px; font-weight:700; padding:4px 11px; border-radius:100px; margin:10px 0 2px; }
 .opp-tag.apply { background:rgba(232,164,39,.2); color:#9a6a06; }
 .opp-tag.open { background:rgba(47,110,92,.12); color:var(--spruce); }
+
+/* ============================================================
+   RESPONSIVE — collapse the sidebar into a top bar on phones
+   ============================================================ */
+@media (max-width: 860px){
+  .site { grid-template-columns: 1fr; }
+  .sidebar { position: sticky; top: 0; z-index: 40; height: auto; align-self: stretch;
+    flex-direction: row; align-items: center; gap: 8px; padding: 9px 14px;
+    border-right: 0; border-bottom: 1px solid var(--line-2); }
+  .sb-brand { padding: 0; flex: none; }
+  .sb-brand .name { font-size: 20px; }
+  .sb-nav { flex-direction: row; gap: 2px; flex: 1; overflow-x: auto; scrollbar-width: none; }
+  .sb-nav::-webkit-scrollbar { display: none; }
+  .sb-nav button { white-space: nowrap; padding: 9px 11px; }
+  .sb-nav button .badge { margin-left: 6px; }
+  .sb-foot { display: none; }              /* fidelity ring still shown in Home/Your-Pop content */
+  .main { padding: 22px 16px 64px; }
+  .page-head h1, .hello h1 { font-size: clamp(26px, 7vw, 34px); }
+  .build-grid, .home-grid, .report-grid, .earn-hero { grid-template-columns: 1fr; }
+  .fid-panel { position: static; }
+}

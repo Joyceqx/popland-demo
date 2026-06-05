@@ -206,7 +206,7 @@ function renderSidebar(){
   const f = fidelity();
   const nav = [
     ['home','Home', `<path d="M5 21V9l7-5 7 5v12"/><path d="M9 21v-6h6v6"/>`],
-    ['build','Your Pop', `<circle cx="12" cy="9" r="4"/><path d="M5 20a7 7 0 0 1 14 0"/>`],
+    ['build','Your '+popName(), `<circle cx="12" cy="9" r="4"/><path d="M5 20a7 7 0 0 1 14 0"/>`],
     ['explore','Explore', `<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>`],
     ['tasks','Tasks', `<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M9 10h6M9 14h4"/>`],
     ['earnings','Earnings', `<circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3h4"/>`],
@@ -230,8 +230,11 @@ function renderSidebar(){
 
 function renderMain(){
   const m = document.getElementById('main');
-  if (S.flow) { m.innerHTML = flowPage(); return; }
-  m.innerHTML = ({ home:homePage, build:buildPage, explore:explorePage, tasks:tasksPage, earnings:earningsPage, deeptalk:deepTalkPage })[S.page]();
+  let html = S.flow ? flowPage()
+    : ({ home:homePage, build:buildPage, explore:explorePage, tasks:tasksPage, earnings:earningsPage, deeptalk:deepTalkPage })[S.page]();
+  const n = popName();
+  if (n && n !== 'Pop') html = html.replace(/\bPop\b/g, () => n);  // rename propagates to every static "Pop" (not "Popland")
+  m.innerHTML = html;
 }
 function ringHTML(f){ return `<div class="ring" style="--p:0"><div><div class="num" id="ringNum">${f}<small>%</small></div><div class="cap">Fidelity</div></div></div>`; }
 function nextGoalInner(f){
@@ -657,10 +660,14 @@ function flowPage(){
       <button class="btn btn-primary" data-flowexit>Back to ${S.flowReturn==='explore'?'Explore':S.flowReturn==='home'?'Home':'Tasks'}</button></div>`;
   }
   const i = S.flowIdx; const q = qs[i]; const pct = Math.round(i/qs.length*100);
+  const isInvite = INVITES.some(t => t.id === S.flow);
+  const intro = isInvite
+    ? `Before ${popName()} heads to ${meta.org}, answer a few questions so it represents you accurately.`
+    : `You’re answering this one yourself for ${meta.org}. Your replies go straight to them — and teach ${popName()} for next time.`;
   return `<div class="flow fade">
     <div class="flow-head"><div class="org">${meta.org}</div><h1>${meta.title}</h1>
       <div class="pay">Earn $${meta.reward.toFixed(2)} · ${qs.length} questions</div>
-      <p class="flow-intro">Before ${popName()} heads to ${meta.org}, we need a little input from you — answer these so your agent represents you accurately.</p></div>
+      <p class="flow-intro">${intro}</p></div>
     <div class="progress"><i style="width:${pct}%"></i></div>
     <div class="q"><div class="qnum">QUESTION ${i+1} / ${qs.length}</div><div class="qtext">${q.q}</div>
       <div class="opts-grid">${q.o.map((o,oi)=>`<button class="opt ${S.flowAns[i]===oi?'picked':''}" data-flowopt="${oi}">${o}</button>`).join('')}</div></div>
