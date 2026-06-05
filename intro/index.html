@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Popland · your behavior, finally an asset you own</title>
+<meta name="description" content="Popland is a C2B behavioral-research platform: everyday people calibrate a personal AI agent that represents their real attitudes, and businesses pay to query it. Calibrated, not synthetic, and revenue-shared with the people it is built from."/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23FF5A36'/%3E%3Ccircle cx='21' cy='21' r='5' fill='%23FFFDF8'/%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Hanken+Grotesk:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --paper:#F2EBDB; --paper-2:#FBF6EC; --paper-3:#FFFDF8;
+  --ink:#241A11; --ink-soft:#6B5D4D; --ink-faint:#9A8C79;
+  --persimmon:#FF5A36; --persimmon-d:#DC3F1B; --persimmon-l:#FFE7DE;
+  --spruce:#2F6E5C; --spruce-l:#46987F; --spruce-vl:#E2EFE9;
+  --gold:#E8A427;
+  --line:rgba(36,26,17,.12); --line-2:rgba(36,26,17,.07);
+  --shadow:0 4px 14px rgba(36,26,17,.08),0 14px 40px rgba(36,26,17,.10);
+  --shadow-lg:0 12px 34px rgba(36,26,17,.14),0 30px 70px rgba(36,26,17,.18);
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Hanken Grotesk',system-ui,sans-serif;color:var(--ink);line-height:1.5;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  background:
+    radial-gradient(55vw 45vw at 100% -8%,rgba(232,164,39,.18),transparent 60%),
+    radial-gradient(50vw 48vw at -8% 6%,rgba(255,90,54,.15),transparent 60%),
+    radial-gradient(60vw 55vw at 60% 112%,rgba(47,110,92,.14),transparent 60%),
+    var(--paper);
+  background-attachment:fixed;
+}
+a{color:inherit;text-decoration:none;}
+.grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E");}
+
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--persimmon-d);}
+.wrap{position:relative;z-index:2;max-width:1140px;margin:0 auto;padding:0 clamp(20px,5vw,48px);}
+.idx{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--ink-faint);display:flex;align-items:center;gap:10px;}
+.idx::after{content:"";flex:1;height:1px;background:var(--line);}
+section{position:relative;z-index:2;}
+.btn{display:inline-flex;align-items:center;gap:9px;font:inherit;font-weight:700;font-size:15px;cursor:pointer;border-radius:100px;padding:13px 24px;transition:transform .14s var(--ease),box-shadow .25s var(--ease),background .2s;}
+.btn-primary{background:var(--persimmon);color:var(--paper-3);box-shadow:0 4px 16px rgba(220,63,27,.34);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(220,63,27,.42);}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);}
+.btn-ghost:hover{border-color:var(--ink);background:rgba(36,26,17,.03);}
+.btn-spruce{background:var(--spruce);color:var(--paper-3);box-shadow:0 4px 16px rgba(47,110,92,.3);}
+.btn-spruce:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(47,110,92,.4);}
+
+/* nav */
+nav{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:20px;
+  padding:14px clamp(20px,5vw,48px);backdrop-filter:blur(12px);
+  background:linear-gradient(180deg,rgba(242,235,219,.9),rgba(242,235,219,.5));border-bottom:1px solid var(--line-2);}
+.brand{display:flex;align-items:center;gap:11px;}
+.brand .mark{width:30px;height:30px;border-radius:9px;position:relative;flex:none;
+  background:radial-gradient(circle at 32% 28%,#ff9270,var(--persimmon) 55%,var(--persimmon-d));
+  box-shadow:0 3px 10px rgba(220,63,27,.4),inset 0 1px 1px rgba(255,255,255,.5);}
+.brand .mark::after{content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:var(--paper-3);right:6px;bottom:6px;}
+.brand .name{font-family:'Fraunces',serif;font-size:22px;font-weight:800;letter-spacing:-.02em;}
+.brand .name span{color:var(--persimmon);}
+.nav-links{display:flex;align-items:center;gap:28px;}
+.nav-links a:not(.btn){font-size:14px;font-weight:600;color:var(--ink-soft);transition:color .15s;}
+.nav-links a:not(.btn):hover{color:var(--ink);}
+
+/* hero */
+.hero{padding:clamp(72px,12vw,124px) 0 clamp(40px,6vw,64px);}
+.hero .inner{max-width:920px;}
+.hero .eyebrow{display:inline-flex;align-items:center;gap:9px;}
+.hero .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--persimmon);box-shadow:0 0 0 4px var(--persimmon-l);}
+.hero h1{font-family:'Fraunces',serif;font-weight:800;letter-spacing:-.025em;line-height:1.0;
+  font-size:clamp(42px,7.4vw,86px);margin:22px 0 26px;}
+.hero h1 em{font-style:italic;color:var(--persimmon);}
+.hero .lede{font-size:clamp(17px,2.1vw,21px);color:var(--ink-soft);max-width:64ch;line-height:1.55;}
+.hero .lede b{color:var(--ink);font-weight:600;}
+.hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px;}
+.hero-demos-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--ink-faint);margin-top:34px;display:block;}
+.hero-jump{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-size:14px;font-weight:600;color:var(--ink-soft);transition:color .15s;}
+.hero-jump:hover{color:var(--ink);}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:38px;}
+.hero-meta span{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:8px;}
+.hero-meta span::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--spruce);}
+
+/* mission quote */
+.quote{text-align:center;padding:clamp(40px,7vw,80px) 0;}
+.quote .ql{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--persimmon-d);font-weight:600;}
+.quote p{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(23px,3.4vw,38px);line-height:1.22;letter-spacing:-.015em;max-width:760px;margin:18px auto 0;}
+.quote p em{font-style:italic;color:var(--persimmon);}
+
+/* section heads */
+.shead{max-width:780px;margin-bottom:clamp(34px,5vw,52px);}
+.shead h2{font-family:'Fraunces',serif;font-weight:800;letter-spacing:-.02em;line-height:1.05;
+  font-size:clamp(30px,4.4vw,50px);margin:16px 0 14px;}
+.shead h2 em{font-style:italic;color:var(--persimmon);}
+.shead p{font-size:clamp(16px,1.8vw,18.5px);color:var(--ink-soft);line-height:1.55;max-width:60ch;}
+.pad{padding:clamp(52px,7vw,96px) 0;}
+
+/* two-sided market */
+.market .shead h2 em{color:var(--spruce);}
+.stage{display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(14px,2vw,26px);align-items:stretch;}
+.party{border-radius:22px;padding:30px clamp(20px,2.6vw,30px);box-shadow:var(--shadow);position:relative;display:flex;flex-direction:column;}
+.party .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;}
+.party h3{font-family:'Fraunces',serif;font-size:25px;font-weight:800;letter-spacing:-.01em;margin:8px 0 4px;}
+.party .role{font-size:14px;font-weight:600;margin-bottom:16px;}
+.party ul{list-style:none;display:flex;flex-direction:column;gap:13px;margin-top:4px;}
+.party li{display:flex;gap:11px;font-size:14.5px;line-height:1.45;color:var(--ink-soft);}
+.party li b{color:var(--ink);font-weight:700;}
+.party li .dot{flex:none;width:18px;height:18px;border-radius:6px;display:grid;place-items:center;margin-top:1px;font-size:11px;font-weight:800;}
+.party.c{background:linear-gradient(165deg,#FFF1EC,var(--paper-3));border:1px solid rgba(220,63,27,.22);}
+.party.c .tag,.party.c h3{color:var(--persimmon-d);}
+.party.c li .dot{background:var(--persimmon-l);color:var(--persimmon-d);}
+.party.b{background:linear-gradient(165deg,#E9F2EE,var(--paper-3));border:1px solid rgba(47,110,92,.22);}
+.party.b .tag,.party.b h3{color:var(--spruce);}
+.party.b li .dot{background:var(--spruce-vl);color:var(--spruce);}
+
+.hub{width:clamp(150px,17vw,196px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;position:relative;}
+.hub .ring{position:relative;width:clamp(118px,14vw,148px);height:clamp(118px,14vw,148px);border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 34% 30%,#ff9270,var(--persimmon) 56%,var(--persimmon-d));
+  box-shadow:0 14px 36px rgba(220,63,27,.36),inset 0 2px 3px rgba(255,255,255,.45);}
+.hub .ring::before{content:"";position:absolute;inset:-11px;border-radius:50%;border:2px dashed var(--spruce-l);opacity:.55;animation:spin 26s linear infinite;}
+.hub .ring .pop{font-family:'Fraunces',serif;font-weight:800;color:var(--paper-3);font-size:clamp(18px,2.4vw,24px);text-align:center;line-height:1;letter-spacing:-.01em;}
+.hub .ring .pop small{display:block;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:9.5px;letter-spacing:.1em;opacity:.85;margin-top:5px;}
+.hub .fid{background:var(--paper-3);border:1px solid var(--line);border-radius:100px;padding:7px 14px;box-shadow:var(--shadow);text-align:center;}
+.hub .fid b{font-family:'Fraunces',serif;font-size:15px;color:var(--spruce);}
+.hub .fid span{display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);}
+.hub .flow{display:flex;flex-direction:column;gap:6px;width:100%;}
+.hub .flow .f{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.04em;text-align:center;padding:6px 8px;border-radius:9px;line-height:1.3;}
+.hub .flow .f.up{background:var(--persimmon-l);color:var(--persimmon-d);}
+.hub .flow .f.down{background:var(--spruce-vl);color:var(--spruce);}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* how it works */
+.howit{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+.howcard{background:var(--paper-3);border:1px solid var(--line);border-radius:22px;padding:30px clamp(22px,2.6vw,32px);box-shadow:var(--shadow);}
+.howcard .howtag{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;}
+.howcard.c .howtag{color:var(--persimmon-d);} .howcard.b .howtag{color:var(--spruce);}
+.howcard h3{font-family:'Fraunces',serif;font-size:24px;font-weight:800;letter-spacing:-.01em;margin:8px 0 8px;}
+.howcard .lead2{font-size:14.5px;color:var(--ink-soft);line-height:1.5;}
+.howcard .kicker{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;margin:22px 0 4px;display:block;}
+.steps2{list-style:none;display:flex;flex-direction:column;}
+.steps2 li{display:flex;gap:13px;padding:11px 0;border-top:1px solid var(--line-2);font-size:14px;line-height:1.45;color:var(--ink-soft);align-items:flex-start;}
+.steps2 li:first-child{border-top:none;}
+.steps2 li b{color:var(--ink);font-weight:700;}
+.steps2 .sn{flex:none;width:24px;height:24px;border-radius:8px;display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;}
+.howcard.c .sn{background:var(--persimmon-l);color:var(--persimmon-d);}
+.howcard.b .sn{background:var(--spruce-vl);color:var(--spruce);}
+.steps2 li.hi{background:#FFF1EC;border-radius:10px;border-top-color:transparent;padding-left:11px;padding-right:11px;}
+.howcard .note{margin-top:16px;font-size:13px;line-height:1.5;border-radius:12px;padding:13px 15px;}
+.howcard.c .note{background:var(--persimmon-l);color:var(--persimmon-d);}
+.howcard.b .note{background:var(--spruce-vl);color:var(--spruce);}
+.howcard .note b{font-weight:800;}
+.howcard .trylink{margin-top:16px;display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;border-radius:100px;padding:9px 17px;transition:background .18s var(--ease);}
+.howcard.c .trylink{color:var(--persimmon-d);border:1px solid rgba(220,63,27,.32);background:var(--persimmon-l);}
+.howcard.c .trylink:hover{background:#FFD9CC;}
+.howcard.b .trylink{color:var(--spruce);border:1px solid rgba(47,110,92,.32);background:var(--spruce-vl);}
+.howcard.b .trylink:hover{background:#D2E8DF;}
+
+/* why us / advantages */
+.adv{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start;}
+.advcard{background:var(--paper-3);border:1px solid var(--line);border-radius:22px;padding:32px clamp(24px,3vw,34px);box-shadow:var(--shadow);}
+.advcard .an{font-family:'Fraunces',serif;font-style:italic;font-size:40px;line-height:1;color:var(--persimmon);opacity:.32;}
+.advcard.two .an{color:var(--spruce);}
+.advcard h3{font-family:'Fraunces',serif;font-size:23px;font-weight:800;letter-spacing:-.01em;line-height:1.13;margin:8px 0 12px;}
+.advcard p{font-size:14.5px;color:var(--ink-soft);line-height:1.55;}
+.graphviz{margin:18px 0 16px;background:linear-gradient(160deg,var(--paper-2),var(--paper-3));border:1px solid var(--line-2);border-radius:14px;padding:12px 12px 6px;}
+.graphviz svg{width:100%;height:auto;display:block;}
+.gpoints{display:flex;flex-direction:column;gap:9px;margin-top:4px;}
+.gpoints div{font-size:13px;color:var(--ink-soft);line-height:1.45;display:flex;gap:9px;}
+.gpoints b{color:var(--ink);font-weight:700;}
+.glink{margin-top:16px;display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--spruce);border:1px solid rgba(47,110,92,.3);background:rgba(47,110,92,.07);padding:8px 15px;border-radius:100px;transition:background .18s var(--ease);}
+.glink:hover{background:rgba(47,110,92,.13);}
+
+/* proof: calibrated not synthetic */
+.proof-label{text-align:center;margin:clamp(34px,5vw,52px) 0 18px;}
+.compare{background:var(--paper-3);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow-lg);}
+.crow{display:grid;grid-template-columns:0.9fr 1fr 1.15fr;}
+.crow:not(:last-child){border-bottom:1px solid var(--line-2);}
+.crow>div{padding:17px clamp(16px,2.4vw,28px);font-size:14.5px;display:flex;align-items:center;}
+.crow .dim{font-weight:700;color:var(--ink);}
+.crow .old{color:var(--ink-soft);border-left:1px solid var(--line-2);}
+.crow .new{color:var(--spruce);font-weight:600;background:linear-gradient(120deg,var(--spruce-vl),rgba(226,239,233,.4));border-left:1px solid var(--line-2);}
+.crow.head .dim,.crow.head .old{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;}
+.crow.head .new{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--spruce);font-weight:700;}
+
+/* flywheel */
+.flywheel{background:var(--ink);border-radius:24px;padding:clamp(30px,4vw,46px) clamp(22px,3vw,40px);color:var(--paper-2);position:relative;overflow:hidden;box-shadow:var(--shadow-lg);}
+.flywheel::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;filter:blur(90px);background:rgba(255,90,54,.32);top:-180px;right:-120px;}
+.flywheel::after{content:"";position:absolute;width:360px;height:360px;border-radius:50%;filter:blur(90px);background:rgba(70,152,127,.3);bottom:-170px;left:-100px;}
+.flywheel .fw-head{position:relative;z-index:1;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:30px;}
+.flywheel .fw-head h3{font-family:'Fraunces',serif;font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-.01em;}
+.flywheel .fw-head h3 em{font-style:italic;color:var(--gold);}
+.flywheel .fw-head p{font-size:14px;color:rgba(251,246,236,.72);max-width:42ch;}
+.loops{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.loop{background:rgba(255,253,248,.06);border:1px solid rgba(255,253,248,.14);border-radius:16px;padding:20px 18px;position:relative;}
+.loop .l-k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--gold);font-weight:600;margin-bottom:10px;display:block;}
+.loop h4{font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin-bottom:7px;}
+.loop p{font-size:13px;color:rgba(251,246,236,.72);line-height:1.5;}
+.loop .arr{position:absolute;right:-12px;top:50%;transform:translateY(-50%);z-index:3;color:var(--persimmon);font-size:17px;}
+.loop:last-child .arr{display:none;}
+.fw-loopback{position:relative;z-index:1;text-align:center;margin-top:22px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;color:rgba(251,246,236,.66);line-height:1.7;}
+.fw-loopback b{color:var(--gold);}
+
+/* verticals */
+.verticals{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+.vert{background:var(--paper-3);border:1px solid var(--line);border-radius:18px;padding:24px 22px;box-shadow:var(--shadow);transition:transform .18s var(--ease),box-shadow .25s var(--ease);}
+.vert:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.vert.lead{border-color:rgba(220,63,27,.32);background:linear-gradient(165deg,#FFF1EC,var(--paper-3));}
+.vbadge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--paper-3);background:var(--persimmon);border-radius:100px;padding:3px 9px;margin-bottom:10px;}
+.vert .ic{font-size:26px;}
+.vert h4{font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin:12px 0 8px;letter-spacing:-.01em;}
+.vert p{font-size:13.5px;color:var(--ink-soft);line-height:1.5;}
+
+/* final cta */
+.final{text-align:center;background:linear-gradient(150deg,#FFF1EC,var(--paper-3) 55%,var(--spruce-vl));border:1px solid var(--line);border-radius:28px;padding:clamp(48px,7vw,80px) clamp(24px,4vw,48px);box-shadow:var(--shadow-lg);}
+.final h2{font-family:'Fraunces',serif;font-weight:800;letter-spacing:-.02em;line-height:1.05;font-size:clamp(30px,4.6vw,52px);margin-bottom:16px;}
+.final h2 em{font-style:italic;color:var(--persimmon);}
+.final p{font-size:clamp(16px,1.9vw,19px);color:var(--ink-soft);max-width:52ch;margin:0 auto 30px;line-height:1.55;}
+.final .hero-cta{justify-content:center;margin-top:0;}
+
+footer{position:relative;z-index:2;text-align:center;padding:40px 20px 56px;color:var(--ink-faint);font-size:12.5px;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em;}
+footer .brand{justify-content:center;margin-bottom:14px;}
+
+/* reveal + load */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
+.reveal.in{opacity:1;transform:none;}
+.reveal.d1{transition-delay:.08s;} .reveal.d2{transition-delay:.16s;} .reveal.d3{transition-delay:.24s;}
+.hl{opacity:0;transform:translateY(20px);animation:rise .8s var(--ease) forwards;}
+.hl.h1{animation-delay:.05s;} .hl.h2{animation-delay:.16s;} .hl.h3{animation-delay:.28s;}
+.hl.h4{animation-delay:.4s;} .hl.h5{animation-delay:.52s;}
+@keyframes rise{to{opacity:1;transform:none;}}
+@media(prefers-reduced-motion:reduce){.reveal,.hl{opacity:1!important;transform:none!important;animation:none!important;}.hub .ring::before{animation:none;}}
+
+@media(max-width:920px){
+  .verticals{grid-template-columns:1fr 1fr;}
+  .loops{grid-template-columns:1fr 1fr;}
+  .loop .arr{display:none;}
+  .nav-links a:not(.btn){display:none;}
+}
+@media(max-width:760px){
+  .stage,.howit,.adv{grid-template-columns:1fr;}
+  .hub{width:100%;flex-direction:row;flex-wrap:wrap;justify-content:center;order:2;padding:6px 0;}
+  .hub .flow{flex-direction:row;width:auto;}
+  .party.c{order:1;} .party.b{order:3;}
+  .crow{grid-template-columns:1fr;}
+  .crow .old,.crow .new{border-left:none;border-top:1px solid var(--line-2);}
+  .crow.head{display:none;}
+  .crow .dim::before{content:"vs · ";color:var(--ink-faint);}
+}
+@media(max-width:520px){
+  .verticals,.loops{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<nav>
+  <a class="brand" href="#top"><span class="mark"></span><span class="name">Pop<span>land</span></span></a>
+  <div class="nav-links">
+    <a href="#market">The market</a>
+    <a href="#howit">How it works</a>
+    <a href="#why">Why us</a>
+    <a class="btn btn-primary" href="https://joyceqx.github.io/popland-demo/#both">See the demo →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="wrap inner">
+    <span class="eyebrow hl h1">Popland · C2B behavioral research</span>
+    <h1 class="hl h2">Your behavior is worth something.<br/><em>Finally, you own it.</em></h1>
+    <p class="lede hl h3">Popland is a research platform where everyday people calibrate a personal AI agent that represents their real attitudes and choices, and businesses pay to query it. <b>More honest than a survey, more alive than synthetic data,</b> and revenue-shared with the people it is built from.</p>
+    <span class="hero-demos-label hl h4">See it live · both sides</span>
+    <div class="hero-cta hl h4" style="margin-top:12px;">
+      <a class="btn btn-primary" href="https://joyceqx.github.io/popland-demo/#both">Consumer app demo ↗</a>
+      <a class="btn btn-spruce" href="https://joyceqx.github.io/popland-demo/b-end/console.html">Business console demo ↗</a>
+    </div>
+    <a class="hero-jump hl h4" href="#market">See how the two-sided market connects them ↓</a>
+    <div class="hero-meta hl h5">
+      <span>Calibrated, not synthetic</span>
+      <span>User-authorized and revenue-shared</span>
+      <span>Fidelity-scored on every answer</span>
+    </div>
+  </div>
+</header>
+
+<!-- MISSION QUOTE -->
+<section class="quote">
+  <div class="wrap reveal">
+    <div class="ql">Why we exist</div>
+    <p>Research has always treated ordinary people as the data source, never the owner. <em>Popland makes them the owner.</em></p>
+  </div>
+</section>
+
+<!-- THE TWO-SIDED MARKET -->
+<section class="pad market" id="market">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="idx">01 / How we deliver value</div>
+      <h2>One agent, <em>two sides of a market.</em></h2>
+      <p>The agent is the medium between two parties who could never reach each other this cleanly before. People supply authorized, calibrated behavioral signal. Businesses pay for grounded answers. The Fidelity Score sets the price for both.</p>
+    </div>
+    <div class="stage">
+      <div class="party c reveal d1">
+        <span class="tag">2C · People</span>
+        <h3>You calibrate. You earn.</h3>
+        <div class="role">Supply side</div>
+        <ul>
+          <li><span class="dot">✓</span><span><b>Calibrate by living.</b> Swipe "me" or "not me," answer a few prompts. Using the app is how you tune your agent.</span></li>
+          <li><span class="dot">✓</span><span><b>Own your agent and data.</b> It represents you, with your permission, and it stays yours.</span></li>
+          <li><span class="dot">✓</span><span><b>Earn passive income.</b> The higher your Fidelity Score, the more each query you answer pays.</span></li>
+        </ul>
+      </div>
+      <div class="hub reveal d2">
+        <div class="ring"><div class="pop">Pop<small>YOUR AGENT</small></div></div>
+        <div class="fid"><b>Fidelity 0.71</b><span>sets the price</span></div>
+        <div class="flow">
+          <div class="f up">↑ authorized signal</div>
+          <div class="f down">↓ pay &amp; insight</div>
+        </div>
+      </div>
+      <div class="party b reveal d3">
+        <span class="tag">2B · Business</span>
+        <h3>You ask. You get a grounded answer.</h3>
+        <div class="role">Demand side</div>
+        <ul>
+          <li><span class="dot">✓</span><span><b>Authorized proxy votes</b> from real, calibrated people. Sharper than careless surveys, more real than synthetic agents.</span></li>
+          <li><span class="dot">✓</span><span><b>Query one agent or a whole segment</b> in a sandbox population.</span></li>
+          <li><span class="dot">✓</span><span><b>Know how far to trust it.</b> Every report ships with a Fidelity Score, and you can escalate to live interviews.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="pad" id="howit">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="idx">02 / How it works</div>
+      <h2>What each side <em>actually does.</em></h2>
+      <p>Two products, one loop. People keep an agent honest through a calibration game. Businesses post research and read a graded answer.</p>
+    </div>
+    <div class="howit">
+      <!-- C product logic -->
+      <div class="howcard c reveal d1">
+        <span class="howtag">2C · The app</span>
+        <h3>Using it is calibrating it.</h3>
+        <p class="lead2">Built for short, one-handed sessions you open between two things you are already doing. Every session moves your Fidelity Score, and your Fidelity Score is what decides your pay.</p>
+        <span class="kicker">The blind reveal</span>
+        <ul class="steps2">
+          <li><span class="sn">1</span><span>A business posts a question.</span></li>
+          <li><span class="sn">2</span><span>Your agent answers it. <b>You do not see its answer.</b></span></li>
+          <li><span class="sn">3</span><span>You answer the same question yourself.</span></li>
+          <li class="hi"><span class="sn">4</span><span><b>The reveal:</b> here is what your agent said.</span></li>
+          <li><span class="sn">5</span><span>The match updates your Fidelity Score, and your pay.</span></li>
+        </ul>
+        <div class="note"><b>You cannot game what you cannot see.</b> Answering blind removes the incentive to make your agent look agreeable, so the calibration data stays honest. That is a selling point to businesses, not just a mechanic.</div>
+        <a class="trylink" href="https://joyceqx.github.io/popland-demo/#both">See the consumer app ↗</a>
+      </div>
+      <!-- B product logic -->
+      <div class="howcard b reveal d2">
+        <span class="howtag">2B · The research console</span>
+        <h3>Ask a question, get a graded answer.</h3>
+        <p class="lead2">An enterprise workspace where a study goes from a brief to a defensible answer in minutes, and tells you exactly how far to trust it.</p>
+        <span class="kicker">A study, end to end</span>
+        <ul class="steps2">
+          <li><span class="sn">1</span><span><b>Brief.</b> Describe your question, audience, and context to Mira, the research copilot. Drop in personas or past studies to ground it.</span></li>
+          <li><span class="sn">2</span><span><b>Simulate.</b> The Behavior Engine runs it across calibrated agents: one segment solo, or a whole population in a sandbox.</span></li>
+          <li><span class="sn">3</span><span><b>Read the result.</b> A prediction with a confidence band, the key drivers, a Fidelity Score, and an honest read on how far to trust it.</span></li>
+          <li><span class="sn">4</span><span><b>Escalate when it matters.</b> Low fidelity or high stakes? Interview the same calibrated people, then re-run with the lift.</span></li>
+        </ul>
+        <div class="note"><b>Calibrated supply, not a black box.</b> Every answer traces back to real, authorized people whose agents are scored for how well they match them.</div>
+        <a class="trylink" href="https://joyceqx.github.io/popland-demo/b-end/console.html">Open the research console ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="pad" id="why">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="idx">03 / Why us</div>
+      <h2>Two advantages, <em>put together for the first time.</em></h2>
+      <p>One keeps the supply fresh. The other makes the simulation defensible. Neither is about out-engineering anyone.</p>
+    </div>
+    <div class="adv">
+      <div class="advcard one reveal d1">
+        <div class="an">01</div>
+        <h3>An approachable app that makes calibration a daily habit.</h3>
+        <p>Everyone else captures behavioral data once, in a long interview or a scraped dump, then watches it go stale. Our app is easy enough to open every day, so the signal stays current. That daily loop is what makes the two-sided market run: people keep calibrating, and businesses keep getting answers that reflect right now, not last year.</p>
+      </div>
+      <div class="advcard two reveal d2">
+        <div class="an">02</div>
+        <h3>A causal graph behind every prediction.</h3>
+        <p>We do not prompt an agent to act like a 27-year-old in New York. We model the population's decision structure as a graph of weighted causal links drawn from published science, then personalize it to each user.</p>
+        <div class="graphviz">
+          <svg viewBox="0 0 470 230" role="img" aria-label="A causal graph linking traits to behaviors with weighted edges">
+            <g stroke-linecap="round" fill="none">
+              <line x1="118" y1="48" x2="352" y2="78" stroke="#E8A427" stroke-width="5" opacity=".8"/>
+              <line x1="118" y1="115" x2="352" y2="162" stroke="#2F6E5C" stroke-width="4" opacity=".62"/>
+              <line x1="118" y1="115" x2="352" y2="78" stroke="#FF5A36" stroke-width="2.6" opacity=".5"/>
+              <line x1="118" y1="48" x2="352" y2="162" stroke="#9A8C79" stroke-width="1.5" opacity=".4"/>
+              <line x1="118" y1="182" x2="352" y2="78" stroke="#9A8C79" stroke-width="1.5" opacity=".4"/>
+              <line x1="118" y1="182" x2="352" y2="162" stroke="#9A8C79" stroke-width="1.5" opacity=".4"/>
+            </g>
+            <g font-family="'IBM Plex Mono',monospace" font-size="10" fill="#6B5D4D">
+              <text x="222" y="55">β .41</text>
+              <text x="222" y="150">β .33</text>
+            </g>
+            <g>
+              <circle cx="118" cy="48" r="9" fill="#FF5A36"/>
+              <circle cx="118" cy="115" r="9" fill="#FF5A36"/>
+              <circle cx="118" cy="182" r="9" fill="#FF5A36"/>
+              <circle cx="352" cy="78" r="10" fill="#2F6E5C"/>
+              <circle cx="352" cy="162" r="10" fill="#2F6E5C"/>
+            </g>
+            <g font-family="'Hanken Grotesk',sans-serif" font-size="12.5" font-weight="600" fill="#241A11">
+              <text x="100" y="52" text-anchor="end">Age</text>
+              <text x="100" y="119" text-anchor="end">Income</text>
+              <text x="100" y="186" text-anchor="end">Personality</text>
+              <text x="370" y="82">Spending</text>
+              <text x="370" y="166">Risk-taking</text>
+            </g>
+          </svg>
+        </div>
+        <div class="gpoints">
+          <div><b>Master graph.</b> A population model of weighted causal links, built from large-scale data and the literature.</div>
+          <div><b>Individual graph.</b> Your measured traits are clamped in, the rest is inferred. The more we measure, the higher your fidelity.</div>
+          <div><b>In-graph vs generative.</b> Known outcomes resolve through the graph with confidence. Novel what-ifs are estimated and fed back in.</div>
+        </div>
+        <a class="glink" href="https://joyceqx.github.io/popland-demo/b-end/behavior_graph_public.html" target="_blank" rel="noopener">Explore the live graph ↗</a>
+      </div>
+    </div>
+
+    <div class="proof-label reveal">
+      <span class="eyebrow">The result: calibrated, not synthetic</span>
+    </div>
+    <div class="compare reveal d1">
+      <div class="crow head">
+        <div class="dim">Dimension</div>
+        <div class="old">Traditional synthetic</div>
+        <div class="new">Popland · user-calibrated</div>
+      </div>
+      <div class="crow">
+        <div class="dim">Realness</div>
+        <div class="old">Population-average pattern</div>
+        <div class="new">Real individual signal, the living outliers</div>
+      </div>
+      <div class="crow">
+        <div class="dim">Timeliness</div>
+        <div class="old">Lags reality, stale data</div>
+        <div class="new">Daily calibration, tracks current preference</div>
+      </div>
+      <div class="crow">
+        <div class="dim">Legitimacy</div>
+        <div class="old">Scraping, with legal and ethical risk</div>
+        <div class="new">User-authorized and revenue-shared, compliant by design</div>
+      </div>
+      <div class="crow">
+        <div class="dim">Trust</div>
+        <div class="old">Opaque confidence</div>
+        <div class="new">An explicit Fidelity Score on every result</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLYWHEEL -->
+<section class="pad" id="flywheel" style="padding-top:0;">
+  <div class="wrap">
+    <div class="shead reveal" style="margin-bottom:28px;">
+      <div class="idx">04 / The compounding loop</div>
+    </div>
+    <div class="flywheel reveal d1">
+      <div class="fw-head">
+        <h3>Four loops that close into a <em>flywheel.</em></h3>
+        <p>Every cycle raises fidelity, which raises the price businesses pay and the reward people earn. Better data begets better data.</p>
+      </div>
+      <div class="loops">
+        <div class="loop"><span class="l-k">A · TRAIN</span><h4>Initialize</h4><p>Active input, passive ingestion, and personality anchoring, all grounded in published science rather than a one-line prompt.</p><span class="arr">→</span></div>
+        <div class="loop"><span class="l-k">B · SIMULATE</span><h4>Match and answer</h4><p>A business posts a task. Agents respond solo or in a sandbox population and return a deep report.</p><span class="arr">→</span></div>
+        <div class="loop"><span class="l-k">C · INCENTIVIZE</span><h4>Pay and share</h4><p>Pay per valid contribution. Revenue flows back to the people whose agents produced the signal.</p><span class="arr">→</span></div>
+        <div class="loop"><span class="l-k">D · CALIBRATE</span><h4>Verify and lift</h4><p>The blind reveal checks the agent against the real person and raises its Fidelity Score.</p><span class="arr">→</span></div>
+      </div>
+      <div class="fw-loopback">↳ higher fidelity → <b>businesses pay more</b> and <b>people earn more</b> → more calibration → repeat</div>
+    </div>
+  </div>
+</section>
+
+<!-- VERTICALS -->
+<section class="pad" id="verticals" style="padding-top:0;">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="idx">05 / Where we start</div>
+      <h2>We do not boil the ocean.</h2>
+      <p>We enter through high-value verticals where realistic, varied human behavior is worth paying for. Gaming is the first wedge: inside a game sandbox, the player's decisions are the calibration data and the playtest result at the same time.</p>
+    </div>
+    <div class="verticals">
+      <div class="vert lead reveal d1"><span class="vbadge">First wedge</span><div class="ic">🎮</div><h4>Gaming</h4><p>Player clones test numeric balance and difficulty. The sandbox is calibration and playtesting in one experience.</p></div>
+      <div class="vert reveal d1"><div class="ic">🏷️</div><h4>Brand &amp; pricing</h4><p>Model churn among price-sensitive segments when a brand raises prices or changes a product.</p></div>
+      <div class="vert reveal d2"><div class="ic">📊</div><h4>Finance &amp; insurance</h4><p>Simulate how people react under financial stress for more resilient actuarial models.</p></div>
+      <div class="vert reveal d2"><div class="ic">🧬</div><h4>Precision health</h4><p>Authorized clones simulate adherence and lifestyle change under diet or drug interventions.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="pad" style="padding-top:0;">
+  <div class="wrap">
+    <div class="final reveal">
+      <h2>The market that is <em>actually made of people.</em></h2>
+      <p>See both sides live: the consumer app where people calibrate their Pop, and the research console where businesses query them.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="https://joyceqx.github.io/popland-demo/#both">Open the combined demo →</a>
+        <a class="btn btn-ghost" href="https://joyceqx.github.io/popland-demo/b-end/">For businesses ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="brand"><span class="mark"></span><span class="name">Pop<span>land</span></span></div>
+  Personal data, finally an asset you own. · Concept · 2026
+</footer>
+
+<script>
+(function(){
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.14,rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>
