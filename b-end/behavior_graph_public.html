@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PopLand — Behavior Engine</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:#f4f3f8;color:#1a1535;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow:hidden;height:100vh;width:100vw;}
+
+    /* BG */
+    .bg-shape{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;}
+    .s1{width:700px;height:700px;background:#ddd6fe;opacity:0.45;top:-250px;left:-180px;}
+    .s2{width:500px;height:500px;background:#bfdbfe;opacity:0.35;bottom:-180px;right:-120px;}
+
+    /* Header */
+    header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 44px;background:rgba(244,243,248,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(99,60,220,0.08);}
+    .logo{font-size:17px;font-weight:700;letter-spacing:-0.4px;background:linear-gradient(135deg,#7c3aed,#2563eb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .header-tag{font-size:11px;font-weight:500;color:#9ca3af;letter-spacing:1.8px;text-transform:uppercase;}
+
+    /* Tab nav */
+    .tab-nav{display:flex;align-items:center;gap:2px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:3px;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
+    .tab-btn{padding:7px 16px;border-radius:9px;border:none;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.22s;background:transparent;color:#9ca3af;white-space:nowrap;}
+    .tab-btn.active{background:#fff;color:#1a1535;box-shadow:0 1px 6px rgba(0,0,0,0.1);}
+    .tab-btn.t-individual.active{background:linear-gradient(135deg,#ede9fe,#dbeafe);color:#5b21b6;}
+    .tab-btn.t-simulation.active{background:linear-gradient(135deg,#ecfdf5,#d1fae5);color:#065f46;}
+
+    /* Pages */
+    .page{position:fixed;top:0;left:0;right:0;bottom:0;opacity:0;pointer-events:none;transition:opacity 0.3s;z-index:1;}
+    .page.active{opacity:1;pointer-events:all;}
+
+    /* ══════════════ OVERVIEW ══════════════ */
+    #page-overview{display:flex;flex-direction:row;padding-top:62px;height:100vh;overflow:hidden;}
+
+    /* Phase 1 — data sources (left column) */
+    .ph1{flex:1;min-width:0;padding:32px 40px 32px 52px;border-right:1px solid rgba(99,60,220,0.1);overflow-y:auto;height:100%;}
+    .onboard-graph{margin-top:20px;}
+    .onboard-graph-label{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#9ca3af;margin-bottom:10px;}
+    .onboard-graph svg{display:block;width:100%;max-width:540px;height:auto;margin:0 auto;}
+    .phase-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+    .ph1 .phase-label{color:#7c3aed;}
+    .ph2 .phase-label{color:#059669;}
+    .section-title{font-size:46px;font-weight:700;letter-spacing:-1px;color:#1a1535;margin-bottom:14px;}
+    .section-desc{font-size:19px;color:#6b7280;line-height:1.65;max-width:820px;margin-bottom:24px;}
+
+    .ds-grid{display:flex;flex-wrap:wrap;gap:13px;}
+    .ds-item{display:flex;align-items:flex-start;gap:13px;padding:18px 20px;background:#fff;border-radius:14px;border:1px solid #f3f4f6;box-shadow:0 1px 4px rgba(0,0,0,0.04);flex:1;min-width:240px;max-width:340px;}
+    .ds-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
+    .ds-name{font-size:16.5px;font-weight:700;color:#1a1535;margin-bottom:4px;}
+    .ds-eg{font-size:13.5px;color:#9ca3af;line-height:1.55;}
+
+    .onboard-box{margin-top:22px;padding:22px 26px;background:linear-gradient(135deg,#f5f3ff,#eff6ff);border:1px solid #c4b5fd;border-radius:16px;}
+    .onboard-title{font-size:17px;font-weight:700;color:#5b21b6;margin-bottom:8px;}
+    .onboard-desc{font-size:15.5px;color:#6b7280;line-height:1.65;}
+
+    /* Phase 2 — flywheel (right column) */
+    .ph2{flex:1;min-width:0;padding:24px 52px 24px 40px;display:flex;flex-direction:column;height:100%;overflow-y:auto;}
+    /* Phase 2 block card (mirrors Phase 1 onboarding box, green-tinted) */
+    .ph2-box{flex:1;display:flex;flex-direction:column;background:linear-gradient(135deg,#ecfdf5,#eff6ff);border-color:#a7f3d0;}
+    .ph2-box .onboard-title{color:#065f46;}
+    .ph2-box .fw-diagram{flex:1;min-height:300px;}
+    .fw-diagram{position:relative;width:100%;flex:1;min-height:340px;}
+    .fw-diagram-svg{position:absolute;top:0;left:0;width:100%;height:100%;overflow:visible;pointer-events:none;}
+    .fw-center{position:absolute;text-align:center;pointer-events:none;}
+    .fw-center-main{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#7c3aed;}
+    .fw-center-sub{font-size:11px;color:#c4b5fd;margin-top:6px;}
+    .fw-node{position:absolute;width:136px;background:#fff;border-radius:14px;border:1px solid #e5e7eb;box-shadow:0 3px 14px rgba(0,0,0,0.08);padding:11px 12px 10px;text-align:center;transition:box-shadow 0.2s,transform 0.2s;cursor:default;}
+    .fw-node:hover{box-shadow:0 8px 28px rgba(0,0,0,0.13);transform:translateY(-2px);}
+    .fw-node-num{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin:0 auto 7px;font-size:12px;font-weight:800;}
+    .fw-node-title{font-size:13px;font-weight:700;color:#1a1535;margin-bottom:3px;line-height:1.2;}
+    .fw-node-desc{font-size:11px;color:#9ca3af;line-height:1.45;}
+
+    /* ══════════════ GRAPH PAGES ══════════════ */
+    .title-block{position:absolute;top:82px;left:44px;z-index:10;max-width:300px;}
+    .title-block h1{font-size:26px;font-weight:700;line-height:1.2;letter-spacing:-0.9px;color:#1a1535;margin-bottom:8px;}
+    .title-block p{font-size:12.5px;color:#6b7280;line-height:1.6;}
+    .ind-badge{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:5px 12px;background:#ede9fe;border:1px solid #c4b5fd;border-radius:20px;}
+    .ind-badge span{font-size:11px;color:#5b21b6;font-weight:600;}
+    .pulse{width:6px;height:6px;border-radius:50%;background:#7c3aed;animation:pulse 2s infinite;}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.35;transform:scale(0.75)}}
+    .legend{position:absolute;bottom:38px;left:44px;z-index:10;display:flex;flex-direction:column;gap:8px;}
+    .legend-title{font-size:10px;font-weight:600;color:#9ca3af;letter-spacing:1.8px;text-transform:uppercase;margin-bottom:2px;}
+    .legend-item{display:flex;align-items:center;gap:9px;font-size:11px;color:#6b7280;}
+    .ldot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+    .lline{width:26px;height:0;flex-shrink:0;}
+    .stats{position:absolute;bottom:38px;right:44px;z-index:10;display:flex;gap:28px;}
+    .stat{text-align:right;}
+    .stat-num{font-size:28px;font-weight:700;letter-spacing:-1px;background:linear-gradient(135deg,#7c3aed,#2563eb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .stat-label{font-size:10px;color:#9ca3af;letter-spacing:0.4px;margin-top:1px;}
+    .hint{position:absolute;top:50%;right:44px;transform:translateY(-50%);z-index:10;font-size:11px;color:#c4c4d0;text-align:right;line-height:1.9;}
+    .graph-svg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;}
+
+    /* ══════════════ SIMULATION ══════════════ */
+    #page-simulation{display:flex;flex-direction:column;padding-top:62px;height:100vh;overflow-y:auto;}
+    .sim-wrap{flex:1;display:flex;flex-direction:column;justify-content:flex-start;padding:32px 44px;gap:18px;}
+    .sim-header{flex-shrink:0;}
+    .sim-header h2{font-size:36px;font-weight:700;letter-spacing:-0.9px;color:#1a1535;margin-bottom:6px;}
+    .sim-header p{font-size:17px;color:#6b7280;line-height:1.6;max-width:740px;}
+
+    .sim-fork{flex-shrink:0;display:flex;align-items:center;gap:14px;padding:2px 0;}
+    .sim-fork-line{flex:1;height:1px;background:#e5e7eb;}
+    .sim-fork-box{padding:10px 24px;background:#fff;border:1.5px solid #e5e7eb;border-radius:24px;font-size:15px;font-weight:700;color:#374151;box-shadow:0 2px 8px rgba(0,0,0,0.06);white-space:nowrap;}
+
+    .sim-panels{display:flex;gap:24px;width:100%;max-width:1340px;margin:0 auto;align-items:stretch;}
+
+    .sim-panel{flex:1;background:#fff;border-radius:18px;border:1px solid #e5e7eb;box-shadow:0 4px 20px rgba(0,0,0,0.07);display:flex;flex-direction:column;}
+    .sim-panel-head{padding:24px 28px 20px;border-bottom:1px solid #f3f4f6;flex-shrink:0;}
+    .sim-panel-tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:6px 15px;border-radius:20px;margin-bottom:12px;}
+    .tag-a{background:#dbeafe;color:#1d4ed8;}
+    .tag-b{background:#d1fae5;color:#065f46;}
+    .sim-panel-title{font-size:26px;font-weight:700;color:#1a1535;margin-bottom:5px;}
+    .sim-panel-query{display:flex;align-items:center;gap:12px;margin-top:14px;background:#f9fafb;border:1px solid #f3f4f6;border-radius:11px;padding:13px 18px;}
+    .qlab{font-size:12px;font-weight:700;color:#9ca3af;letter-spacing:1.2px;text-transform:uppercase;white-space:nowrap;}
+    .qtxt{font-size:15.5px;font-weight:600;color:#1a1535;flex:1;}
+    .quser{font-size:13px;color:#5b21b6;background:#ede9fe;padding:6px 13px;border-radius:20px;font-weight:600;white-space:nowrap;}
+
+    .sim-panel-body{display:flex;flex-direction:column;}
+    .sim-svg-wrap{display:flex;justify-content:center;align-items:center;padding:22px 12px 8px;}
+    /* Cap diagram width so it stays a sensible size and the panel hugs its content */
+    .sim-svg-wrap svg{width:100% !important;height:auto !important;max-width:560px;}
+    .sim-steps{padding:14px 28px 26px;display:flex;flex-direction:column;gap:16px;}
+    .ss{display:flex;align-items:flex-start;gap:13px;}
+    .ss-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;margin-top:2px;}
+    .ss-num.a{background:#dbeafe;color:#1d4ed8;}
+    .ss-num.b{background:#d1fae5;color:#065f46;}
+    .ss-body{}
+    .ss-title{font-size:16.5px;font-weight:700;color:#374151;margin-bottom:5px;}
+    .ss-desc{font-size:15px;color:#6b7280;line-height:1.6;}
+    .chip-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;}
+    .chip{padding:6px 13px;border-radius:20px;font-size:12.5px;font-weight:600;}
+    .chip-i{background:#ede9fe;color:#5b21b6;}
+    .chip-m{background:#dbeafe;color:#1d4ed8;}
+    .chip-c{background:#fef9c3;color:#92400e;}
+    .chip-n{background:#fef3c7;color:#92400e;border:1.5px dashed #fbbf24;}
+    .result-pill{display:inline-flex;align-items:center;margin-top:10px;padding:10px 20px;border-radius:24px;font-size:16px;font-weight:700;}
+    .result-pill.a{background:#dbeafe;color:#1d4ed8;}
+    .result-pill.b{background:#d1fae5;color:#065f46;}
+
+    /* SVG animation — opacity:0 initial hides arrowheads before animation */
+    @keyframes sg-in{from{opacity:0}to{opacity:1}}
+    @keyframes sg-edge{0%{stroke-dashoffset:var(--dl,300);opacity:0}15%{opacity:1}100%{stroke-dashoffset:0;opacity:1}}
+    @keyframes sg-fade{from{opacity:0}to{opacity:1}}
+    @keyframes sg-new{0%{opacity:0}60%{opacity:0.8}100%{opacity:1}}
+    @keyframes sg-pulse{0%,100%{opacity:0.15}50%{opacity:0.8}}
+    .sgn{opacity:0;animation:sg-in 0.5s ease both;}
+    .sge{stroke-dasharray:var(--dl,300);stroke-dashoffset:var(--dl,300);opacity:0;animation:sg-edge 0.8s ease both;}
+    .sgf{opacity:0;animation:sg-fade 0.5s ease both;}
+    .sgw{opacity:0;animation:sg-new 0.6s ease both;}
+    .sgp{animation:sg-pulse 0.4s ease both;}
+
+    /* Tooltip */
+    .tooltip{position:fixed;z-index:200;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:15px 18px;pointer-events:none;opacity:0;transition:opacity 0.15s;max-width:290px;box-shadow:0 8px 40px rgba(0,0,0,0.12);}
+    .tooltip.on{opacity:1;}
+    .tt-top{display:flex;align-items:center;gap:6px;margin-bottom:10px;}
+    .tt-badge{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:3px 8px;border-radius:20px;}
+    .tt-badge.causal{background:#ede9fe;color:#5b21b6;}
+    .tt-badge.bidir{background:#dbeafe;color:#1d4ed8;}
+    .tt-badge.uncertain{background:#fef3c7;color:#92400e;}
+    .tt-badge.deact{background:#f3f4f6;color:#9ca3af;}
+    .tt-arrow-row{display:flex;align-items:center;gap:7px;margin-bottom:11px;}
+    .tt-name{font-size:13px;font-weight:600;color:#1a1535;}
+    .tt-arr{font-size:13px;color:#9ca3af;}
+    .tt-divider{border:none;border-top:1px solid #f3f4f6;margin:10px 0;}
+    .tt-row{display:flex;align-items:center;gap:8px;margin-top:7px;}
+    .tt-rlabel{font-size:11px;color:#9ca3af;min-width:78px;}
+    .bbar-wrap{flex:1;height:4px;background:#f3f4f6;border-radius:2px;overflow:hidden;}
+    .bbar{height:100%;border-radius:2px;}
+    .tt-val{font-size:11px;font-weight:700;color:#374151;min-width:36px;text-align:right;}
+    .tt-mod-tag{display:inline-flex;align-items:center;gap:5px;margin-top:9px;padding:4px 10px;background:#ecfeff;border:1px solid #a5f3fc;border-radius:20px;font-size:10px;color:#0e7490;font-weight:500;}
+    .tt-extra-box{margin-top:9px;padding:8px 11px;border-radius:8px;font-size:11px;line-height:1.55;}
+    .deact-info{background:#f9fafb;color:#6b7280;border:1px solid #f3f4f6;}
+    .clamped-info{background:#f5f3ff;color:#5b21b6;border:1px solid #ddd6fe;}
+    .uncertain-info{background:#fffbeb;color:#92400e;border:1px solid #fde68a;}
+  </style>
+</head>
+<body>
+  <div class="bg-shape s1"></div>
+  <div class="bg-shape s2"></div>
+
+  <header>
+    <div class="logo">PopLand</div>
+    <div class="tab-nav">
+      <button class="tab-btn t-overview active" onclick="showTab('overview')">How It Works</button>
+      <button class="tab-btn t-master"          onclick="showTab('master')">Master Graph</button>
+      <button class="tab-btn t-individual"      onclick="showTab('individual')">Individual Graph</button>
+      <button class="tab-btn t-simulation"      onclick="showTab('simulation')">Simulation</button>
+    </div>
+    <div class="header-tag">Behavior Engine · Demo</div>
+  </header>
+
+  <!-- ══ PAGE 1: HOW IT WORKS ══ -->
+  <div class="page active" id="page-overview">
+
+    <!-- Phase 1: Data Sources (left column) -->
+    <div class="ph1">
+      <div class="phase-label">Phase 1 · Before Users</div>
+      <div class="section-title">Building the Master Graph</div>
+      <div class="section-desc">We synthesize a broad base of population-level behavioral evidence into a single causal model of how people make decisions.</div>
+      <div class="onboard-box">
+        <div class="onboard-title">User Onboarding Strategy</div>
+        <div class="onboard-desc">We prioritize the <strong>highest out-degree nodes</strong> as onboarding variables — so each new user answers the fewest questions for the most predictive power.</div>
+        <!-- Graph illustration sits with the strategy it illustrates -->
+        <div class="onboard-graph">
+          <div class="onboard-graph-label">Onboarding Priority by Out-Degree</div>
+          <svg viewBox="0 0 320 285">
+          <defs>
+            <marker id="ph1-arr" viewBox="0 -3 7 6" refX="6" refY="0" markerWidth="5" markerHeight="5" orient="auto">
+              <path d="M0,-3L7,0L0,3Z" fill="#c4b5fd"/>
+            </marker>
+            <marker id="ph1-arr-b" viewBox="0 -3 7 6" refX="6" refY="0" markerWidth="4" markerHeight="4" orient="auto">
+              <path d="M0,-3L7,0L0,3Z" fill="#93c5fd"/>
+            </marker>
+          </defs>
+
+          <!-- Edges: hub → behavior (purple) -->
+          <!-- Eco Consciousness (105,80) → Buys Organic (30,185), Owns EV (175,18), Store Brand (260,150) -->
+          <line x1="105" y1="80" x2="46"  y2="173" stroke="#a78bfa" stroke-width="1.6" opacity="0.7" marker-end="url(#ph1-arr)"/>
+          <line x1="105" y1="80" x2="166" y2="29"  stroke="#a78bfa" stroke-width="1.6" opacity="0.7" marker-end="url(#ph1-arr)"/>
+          <line x1="105" y1="80" x2="247" y2="141" stroke="#a78bfa" stroke-width="1.2" opacity="0.45" marker-end="url(#ph1-arr)"/>
+
+          <!-- Status Seeking (215,80) → Owns EV (175,18), Apple One (295,185), Posts UGC (215,225) -->
+          <line x1="215" y1="80" x2="184" y2="29"  stroke="#a78bfa" stroke-width="1.6" opacity="0.7" marker-end="url(#ph1-arr)"/>
+          <line x1="215" y1="80" x2="284" y2="173" stroke="#a78bfa" stroke-width="1.6" opacity="0.7" marker-end="url(#ph1-arr)"/>
+          <line x1="215" y1="80" x2="215" y2="210" stroke="#a78bfa" stroke-width="1.2" opacity="0.45" marker-end="url(#ph1-arr)"/>
+
+          <!-- Tech Enthusiasm (160,155) → Apple One (295,185), Uber Eats (80,230), Owns EV (175,18) -->
+          <line x1="160" y1="155" x2="276" y2="180" stroke="#a78bfa" stroke-width="1.6" opacity="0.7" marker-end="url(#ph1-arr)"/>
+          <line x1="160" y1="155" x2="97"  y2="222" stroke="#a78bfa" stroke-width="1.6" opacity="0.7" marker-end="url(#ph1-arr)"/>
+          <line x1="160" y1="155" x2="175" y2="39"  stroke="#a78bfa" stroke-width="1.0" opacity="0.35" marker-end="url(#ph1-arr)"/>
+
+          <!-- Context node (Urban Living 30,110) → Uber Eats (80,230) — thin grey -->
+          <line x1="30" y1="122" x2="68"  y2="218" stroke="#d1d5db" stroke-width="1" opacity="0.7" marker-end="url(#ph1-arr-b)"/>
+
+          <!-- Hub priority glow rings -->
+          <circle cx="105" cy="80" r="36" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,3" opacity="0.85"/>
+          <circle cx="215" cy="80" r="36" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,3" opacity="0.85"/>
+          <circle cx="160" cy="155" r="36" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,3" opacity="0.85"/>
+
+          <!-- Hub nodes (high out-degree traits) -->
+          <g transform="translate(105,80)">
+            <circle r="30" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+            <text text-anchor="middle" dy="-5" font-size="8" font-weight="700" fill="#5b21b6" font-family="system-ui">Eco</text>
+            <text text-anchor="middle" dy="5" font-size="8" font-weight="700" fill="#5b21b6" font-family="system-ui">Conscious</text>
+          </g>
+          <circle cx="105" cy="80" r="30" fill="none"/>
+
+          <g transform="translate(215,80)">
+            <circle r="30" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+            <text text-anchor="middle" dy="-5" font-size="8" font-weight="700" fill="#5b21b6" font-family="system-ui">Status</text>
+            <text text-anchor="middle" dy="5" font-size="8" font-weight="700" fill="#5b21b6" font-family="system-ui">Seeking</text>
+          </g>
+
+          <g transform="translate(160,155)">
+            <circle r="30" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+            <text text-anchor="middle" dy="-5" font-size="8" font-weight="700" fill="#5b21b6" font-family="system-ui">Tech</text>
+            <text text-anchor="middle" dy="5" font-size="8" font-weight="700" fill="#5b21b6" font-family="system-ui">Enthusiasm</text>
+          </g>
+
+          <!-- Context node (low out-degree) -->
+          <g transform="translate(30,110)">
+            <circle r="18" fill="#d1fae5" stroke="#059669" stroke-width="1.2"/>
+            <text text-anchor="middle" dy="-3" font-size="7" font-weight="600" fill="#065f46" font-family="system-ui">Urban</text>
+            <text text-anchor="middle" dy="6" font-size="7" font-weight="600" fill="#065f46" font-family="system-ui">Living</text>
+          </g>
+
+          <!-- Behavior leaf nodes -->
+          <g transform="translate(175,25)">
+            <circle r="21" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4"/>
+            <text text-anchor="middle" dy="-3" font-size="7" font-weight="600" fill="#1d4ed8" font-family="system-ui">Owns</text>
+            <text text-anchor="middle" dy="6" font-size="7" font-weight="600" fill="#1d4ed8" font-family="system-ui">EV</text>
+          </g>
+          <g transform="translate(35,190)">
+            <circle r="21" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4"/>
+            <text text-anchor="middle" dy="-3" font-size="7" font-weight="600" fill="#1d4ed8" font-family="system-ui">Buys</text>
+            <text text-anchor="middle" dy="6" font-size="7" font-weight="600" fill="#1d4ed8" font-family="system-ui">Organic</text>
+          </g>
+          <g transform="translate(258,155)">
+            <circle r="21" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4"/>
+            <text text-anchor="middle" dy="-3" font-size="7" font-weight="600" fill="#1d4ed8" font-family="system-ui">Store</text>
+            <text text-anchor="middle" dy="6" font-size="7" font-weight="600" fill="#1d4ed8" font-family="system-ui">Brand</text>
+          </g>
+          <g transform="translate(289,185)">
+            <circle r="21" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4"/>
+            <text text-anchor="middle" dy="-3" font-size="7" font-weight="600" fill="#1d4ed8" font-family="system-ui">Apple</text>
+            <text text-anchor="middle" dy="6" font-size="7" font-weight="600" fill="#1d4ed8" font-family="system-ui">One</text>
+          </g>
+          <g transform="translate(83,232)">
+            <circle r="21" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4"/>
+            <text text-anchor="middle" dy="-3" font-size="7" font-weight="600" fill="#1d4ed8" font-family="system-ui">Uber</text>
+            <text text-anchor="middle" dy="6" font-size="7" font-weight="600" fill="#1d4ed8" font-family="system-ui">Eats</text>
+          </g>
+          <g transform="translate(215,225)">
+            <circle r="21" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4"/>
+            <text text-anchor="middle" dy="-3" font-size="7" font-weight="600" fill="#1d4ed8" font-family="system-ui">Posts</text>
+            <text text-anchor="middle" dy="6" font-size="7" font-weight="600" fill="#1d4ed8" font-family="system-ui">UGC</text>
+          </g>
+
+          <!-- Legend -->
+          <circle cx="10" cy="270" r="5" fill="#f59e0b"/>
+          <text x="20" y="274" font-size="8" fill="#92400e" font-weight="600" font-family="system-ui">Onboarding variables · high out-degree</text>
+        </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 2: Flywheel (right column) -->
+    <div class="ph2">
+      <div class="phase-label">Phase 2 · Live Flywheel</div>
+      <div class="section-title">The Data Flywheel</div>
+      <div class="section-desc">Every business simulation generates an outcome. Every outcome feeds back into both graphs, compounding accuracy continuously.</div>
+
+      <div class="onboard-box ph2-box">
+        <div class="onboard-title">The Learning Loop</div>
+        <div class="onboard-desc">Each prediction is checked against real behavior — and what we learn feeds back into the model.</div>
+        <div class="onboard-graph-label" style="margin-top:16px;">Continuous · self-improving</div>
+        <div class="fw-diagram" id="fw-diagram">
+        <svg class="fw-diagram-svg" id="fw-svg">
+          <defs>
+            <marker id="fw-arr" viewBox="0 -4 9 8" refX="8" refY="0" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M0,-4L9,0L0,4Z" fill="#a78bfa"/>
+            </marker>
+          </defs>
+        </svg>
+        <div class="fw-center" id="fw-center">
+          <div class="fw-center-main">Data<br/>Flywheel</div>
+          <div class="fw-center-sub">↻ continuous</div>
+        </div>
+        <div class="fw-node" id="fwn0" data-angle="270">
+          <div class="fw-node-num" style="background:#ede9fe;color:#5b21b6;">01</div>
+          <div class="fw-node-title">User Onboarded</div>
+          <div class="fw-node-desc">Individual graph instantiated from master graph</div>
+        </div>
+        <div class="fw-node" id="fwn1" data-angle="342">
+          <div class="fw-node-num" style="background:#dbeafe;color:#1d4ed8;">02</div>
+          <div class="fw-node-title">B-end Query</div>
+          <div class="fw-node-desc">Business client requests behavior prediction</div>
+        </div>
+        <div class="fw-node" id="fwn2" data-angle="54">
+          <div class="fw-node-num" style="background:#d1fae5;color:#065f46;">03</div>
+          <div class="fw-node-title">Agent Simulation</div>
+          <div class="fw-node-desc">Agent produces a behavior prediction</div>
+        </div>
+        <div class="fw-node" id="fwn3" data-angle="126">
+          <div class="fw-node-num" style="background:#fce7f3;color:#9d174d;">04</div>
+          <div class="fw-node-title">Behavior Observed</div>
+          <div class="fw-node-desc">Real outcome recorded; calibration applied if available</div>
+        </div>
+        <div class="fw-node" id="fwn4" data-angle="198">
+          <div class="fw-node-num" style="background:#fef9c3;color:#92400e;">05</div>
+          <div class="fw-node-title">Graphs Updated</div>
+          <div class="fw-node-desc">Individual + master graph edge weights revised</div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PAGE 2: MASTER GRAPH ══ -->
+  <div class="page" id="page-master">
+    <div class="title-block">
+      <h1>Population-Level<br/>Causal Graph</h1>
+      <p>The average decision structure across the population — how traits, context, and behaviors relate.</p>
+    </div>
+    <div class="legend">
+      <div class="legend-title">Variable Type</div>
+      <div class="legend-item"><div class="ldot" style="background:#7c3aed"></div>Psychological trait</div>
+      <div class="legend-item"><div class="ldot" style="background:#2563eb"></div>Behavioral outcome</div>
+      <div class="legend-item"><div class="ldot" style="background:#059669"></div>Contextual factor</div>
+      <div class="legend-title" style="margin-top:10px">Edge Type</div>
+      <div class="legend-item"><div class="lline" style="border-top:2px solid #6d28d9"></div>Causal (→)</div>
+      <div class="legend-item"><div class="lline" style="border-top:2px solid #2563eb"></div>Bidirectional (↔)</div>
+      <div class="legend-item"><div class="lline" style="border-top:2px dashed #6b7280"></div>Uncertain</div>
+      <div class="legend-item"><div class="lline" style="border-top:1.5px dashed #0891b2"></div>Moderator</div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-num">15</div><div class="stat-label">Constructs</div></div>
+      <div class="stat"><div class="stat-num">25</div><div class="stat-label">Causal Edges</div></div>
+    </div>
+    <div class="hint">Hover edges to explore<br/>causal links<br/><br/>Drag nodes to<br/>rearrange</div>
+    <svg class="graph-svg" id="graph-master"></svg>
+  </div>
+
+  <!-- ══ PAGE 3: INDIVIDUAL GRAPH ══ -->
+  <div class="page" id="page-individual">
+    <div class="title-block">
+      <h1>Individual-Level<br/>Causal Graph</h1>
+      <p>One user's personalized model — measured traits anchor the picture; the rest is predicted.</p>
+      <div class="ind-badge"><div class="pulse"></div><span>User: Alex · 5 of 15 measured</span></div>
+    </div>
+    <div class="legend">
+      <div class="legend-title">Variable Type</div>
+      <div class="legend-item"><div class="ldot" style="background:#7c3aed"></div>Psychological trait</div>
+      <div class="legend-item"><div class="ldot" style="background:#2563eb"></div>Behavioral outcome</div>
+      <div class="legend-item"><div class="ldot" style="background:#059669"></div>Contextual factor</div>
+      <div class="legend-title" style="margin-top:10px">Individual Mode</div>
+      <div class="legend-item"><div class="ldot" style="background:#7c3aed;outline:2px solid #a78bfa;outline-offset:2px"></div>Clamped (measured)</div>
+      <div class="legend-item"><div class="lline" style="border-top:1px dashed #d1d5db"></div>Deactivated edge</div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-num">15</div><div class="stat-label">Constructs</div></div>
+      <div class="stat"><div class="stat-num">5</div><div class="stat-label">Measured</div></div>
+      <div class="stat"><div class="stat-num">0.33</div><div class="stat-label">Graph Coverage</div></div>
+    </div>
+    <div class="hint">Measured traits anchor<br/>the prediction<br/><br/>The rest is inferred<br/>from what we know</div>
+    <svg class="graph-svg" id="graph-individual"></svg>
+  </div>
+
+  <!-- ══ PAGE 4: SIMULATION ══ -->
+  <div class="page" id="page-simulation">
+    <div class="sim-wrap">
+
+      <div class="sim-header">
+        <h2>Simulation Outcomes</h2>
+        <p>Every business query resolves into one of two paths depending on whether the target outcome variable already exists in our database.</p>
+      </div>
+
+      <div class="sim-fork">
+        <div class="sim-fork-line"></div>
+        <div class="sim-fork-box">Does the outcome variable exist in our database?</div>
+        <div class="sim-fork-line"></div>
+      </div>
+
+      <div class="sim-panels">
+
+        <!-- Panel A: In-graph -->
+        <div class="sim-panel">
+          <div class="sim-panel-head">
+            <div class="sim-panel-tag tag-a">Yes — In Database</div>
+            <div class="sim-panel-title">Causal Graph Inference</div>
+            <div class="sim-panel-query">
+              <span class="qlab">Query</span>
+              <span class="qtxt">"How likely is Alex to buy an EV in the next 12 months?"</span>
+              <span class="quser">User: Alex</span>
+            </div>
+          </div>
+          <div class="sim-panel-body">
+            <div class="sim-svg-wrap">
+              <svg id="sim-svg-a" viewBox="0 0 390 185" width="390" height="185" style="overflow:visible">
+                <defs>
+                  <marker id="aa" viewBox="0 -4 9 8" refX="8" refY="0" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,-4L9,0L0,4Z" fill="#6d28d9"/></marker>
+                  <marker id="aa-g" viewBox="0 -4 9 8" refX="8" refY="0" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,-4L9,0L0,4Z" fill="#059669"/></marker>
+                  <marker id="aa-c" viewBox="0 -4 9 8" refX="8" refY="0" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,-4L9,0L0,4Z" fill="#0891b2"/></marker>
+                </defs>
+                <!-- edges -->
+                <path class="sge" style="--dl:210;animation-delay:1.1s" d="M78,62 C170,62 230,90 281,91" stroke="#6d28d9" stroke-width="2" fill="none" opacity="0.7" marker-end="url(#aa)"/>
+                <path class="sge" style="--dl:210;animation-delay:1.9s" d="M78,140 C170,140 225,98 281,95" stroke="#6d28d9" stroke-width="2" fill="none" opacity="0.7" marker-end="url(#aa)"/>
+                <path class="sge" style="--dl:120;animation-delay:1.5s" d="M210,30 C242,56 264,78 282,87" stroke="#059669" stroke-width="1.5" fill="none" opacity="0.6" marker-end="url(#aa-g)"/>
+                <!-- moderator tick: Household Income moderates the Status→Tesla edge (dot sits on that edge's midpoint) -->
+                <line class="sge" style="--dl:75;animation-delay:1.7s" x1="207" y1="47" x2="193" y2="118" stroke="#0891b2" stroke-width="1.2" stroke-dasharray="3,3" opacity="0.7"/>
+                <circle cx="193" cy="119" r="4" fill="#22d3ee" stroke="#0891b2" stroke-width="1.2" opacity="0" style="animation:sg-in 0.3s ease 2s both"/>
+                <!-- nodes -->
+                <g class="sgn" style="animation-delay:0s" transform="translate(78,62)">
+                  <circle r="34" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5" stroke-dasharray="5,3"/>
+                  <text text-anchor="middle" dy="-6" font-size="9" font-weight="700" fill="#5b21b6" font-family="system-ui">Eco</text>
+                  <text text-anchor="middle" dy="6" font-size="9" font-weight="700" fill="#5b21b6" font-family="system-ui">Consciousness</text>
+                  <text text-anchor="middle" dy="18" font-size="8" font-weight="600" fill="#a78bfa" font-family="system-ui">High ✓</text>
+                </g>
+                <g class="sgn" style="animation-delay:0.2s" transform="translate(78,140)">
+                  <circle r="30" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+                  <text text-anchor="middle" dy="-4" font-size="9" font-weight="700" fill="#5b21b6" font-family="system-ui">Status</text>
+                  <text text-anchor="middle" dy="7" font-size="9" font-weight="700" fill="#5b21b6" font-family="system-ui">Seeking</text>
+                </g>
+                <g class="sgn" style="animation-delay:0.1s" transform="translate(210,24)">
+                  <circle r="24" fill="#d1fae5" stroke="#059669" stroke-width="2.5" stroke-dasharray="5,3"/>
+                  <text text-anchor="middle" dy="-3" font-size="8" font-weight="700" fill="#065f46" font-family="system-ui">Household</text>
+                  <text text-anchor="middle" dy="7" font-size="8" font-weight="700" fill="#065f46" font-family="system-ui">Income</text>
+                  <text text-anchor="middle" dy="17" font-size="7.5" fill="#6ee7b7" font-family="system-ui">High ✓</text>
+                </g>
+                <g class="sgn" style="animation-delay:0.3s" transform="translate(320,92)">
+                  <circle r="40" fill="#dbeafe" stroke="#2563eb" stroke-width="1.8"/>
+                  <text text-anchor="middle" dy="-8" font-size="9" font-weight="700" fill="#1d4ed8" font-family="system-ui">Owns Tesla</text>
+                  <text text-anchor="middle" dy="4" font-size="9" font-weight="700" fill="#1d4ed8" font-family="system-ui">or EV</text>
+                  <text text-anchor="middle" dy="16" font-size="8" fill="#93c5fd" font-family="system-ui">target</text>
+                </g>
+                <!-- result -->
+                <g class="sgf" style="animation-delay:2.7s" transform="translate(320,92)">
+                  <rect x="-27" y="26" width="54" height="20" rx="10" fill="#1d4ed8"/>
+                  <text x="0" y="40" text-anchor="middle" font-size="11" font-weight="800" fill="#fff" font-family="system-ui">78%</text>
+                </g>
+                <text class="sgf" style="animation-delay:1.3s" x="168" y="72" font-size="8" fill="#9ca3af" font-family="system-ui">strong</text>
+                <text class="sgf" style="animation-delay:2.1s" x="168" y="134" font-size="8" fill="#9ca3af" font-family="system-ui">strong</text>
+              </svg>
+            </div>
+            <div class="sim-steps">
+              <div class="ss"><div class="ss-num a">1</div><div class="ss-body"><div class="ss-title">Query matched to graph node</div><div class="ss-desc">Maps to <em>Owns Tesla or EV</em> in Alex's individual graph.</div></div></div>
+              <div class="ss"><div class="ss-num a">2</div><div class="ss-body"><div class="ss-title">Agent traces the causal factors specific to this user</div><div class="ss-desc">Known values about this user (Eco Consciousness = High, Household Income = High) inform the prediction.</div></div></div>
+              <div class="ss"><div class="ss-num a">3</div><div class="ss-body"><div class="ss-title">Structured prediction</div><div class="result-pill a">EV Purchase: 78% · High confidence</div></div></div>
+              <div class="ss"><div class="ss-num a">4</div><div class="ss-body"><div class="ss-title">Prediction returned — no graph change</div><div class="ss-desc">Edge weights are revised <strong>only if the user self-calibrates</strong> the outcome. Without calibration, the graph stays as-is.</div><div class="chip-row"><span class="chip chip-c">If calibrated →</span><span class="chip chip-i">Individual Graph</span><span class="chip chip-m">Master Graph</span></div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel B: Out-of-graph -->
+        <div class="sim-panel">
+          <div class="sim-panel-head">
+            <div class="sim-panel-tag tag-b">No — Not in Database</div>
+            <div class="sim-panel-title">Generative AI Inference</div>
+            <div class="sim-panel-query">
+              <span class="qlab">Query</span>
+              <span class="qtxt">"Would Alex adopt AR glasses if released at $499?"</span>
+              <span class="quser">User: Alex</span>
+            </div>
+          </div>
+          <div class="sim-panel-body">
+            <div class="sim-svg-wrap">
+              <svg id="sim-svg-b" viewBox="0 0 400 230" width="400" height="230" style="overflow:visible">
+                <defs>
+                  <marker id="ab" viewBox="0 -4 9 8" refX="8" refY="0" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,-4L9,0L0,4Z" fill="#059669"/></marker>
+                  <marker id="ab-p" viewBox="0 -4 9 8" refX="8" refY="0" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,-4L9,0L0,4Z" fill="#6d28d9"/></marker>
+                </defs>
+                <!-- search pulse rings on existing nodes -->
+                <circle class="sgp" cx="78" cy="72"  r="42" fill="none" stroke="#7c3aed" stroke-width="1.5" opacity="0" style="animation-delay:1s;animation-iteration-count:3"/>
+                <circle class="sgp" cx="78" cy="170" r="36" fill="none" stroke="#7c3aed" stroke-width="1.5" opacity="0" style="animation-delay:1.1s;animation-iteration-count:3"/>
+                <circle class="sgp" cx="210" cy="36" r="28" fill="none" stroke="#059669" stroke-width="1.5" opacity="0" style="animation-delay:1.2s;animation-iteration-count:3"/>
+                <!-- edges from existing nodes to new node -->
+                <path style="--dl:210;animation:sg-edge 0.6s ease 2.5s both" d="M78,72  C160,72  230,107 287,109" stroke="#059669" stroke-width="1.8" fill="none" marker-end="url(#ab)"/>
+                <path style="--dl:210;animation:sg-edge 0.6s ease 2.7s both" d="M78,170 C160,170 230,116 287,113" stroke="#059669" stroke-width="1.5" fill="none" marker-end="url(#ab)"/>
+                <path style="--dl:140;animation:sg-edge 0.6s ease 2.9s both" d="M210,36  C242,66  270,92  287,105" stroke="#059669" stroke-width="1.2" fill="none" marker-end="url(#ab)"/>
+                <!-- existing nodes -->
+                <g class="sgn" style="animation-delay:0s" transform="translate(78,72)">
+                  <circle r="38" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5" stroke-dasharray="5,3"/>
+                  <text text-anchor="middle" dy="-6" font-size="9" font-weight="700" fill="#5b21b6" font-family="system-ui">Tech</text>
+                  <text text-anchor="middle" dy="5" font-size="9" font-weight="700" fill="#5b21b6" font-family="system-ui">Enthusiasm</text>
+                  <text text-anchor="middle" dy="17" font-size="8" fill="#a78bfa" font-family="system-ui">High ✓</text>
+                </g>
+                <g class="sgn" style="animation-delay:0.2s" transform="translate(78,170)">
+                  <circle r="32" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+                  <text text-anchor="middle" dy="-4" font-size="9" font-weight="700" fill="#5b21b6" font-family="system-ui">Status</text>
+                  <text text-anchor="middle" dy="7" font-size="9" font-weight="700" fill="#5b21b6" font-family="system-ui">Seeking</text>
+                </g>
+                <g class="sgn" style="animation-delay:0.1s" transform="translate(210,36)">
+                  <circle r="26" fill="#d1fae5" stroke="#059669" stroke-width="2.5" stroke-dasharray="5,3"/>
+                  <text text-anchor="middle" dy="-4" font-size="8" font-weight="700" fill="#065f46" font-family="system-ui">Household</text>
+                  <text text-anchor="middle" dy="6" font-size="8" font-weight="700" fill="#065f46" font-family="system-ui">Income</text>
+                  <text text-anchor="middle" dy="16" font-size="7.5" fill="#6ee7b7" font-family="system-ui">High ✓</text>
+                </g>
+                <!-- existing behavior node (graph already has behaviors) — placed clear of the green inference edges -->
+                <path class="sge" style="--dl:90;animation-delay:0.5s" d="M104,191 C140,196 168,196 191,191" stroke="#6d28d9" stroke-width="1.4" fill="none" opacity="0.5" marker-end="url(#ab-p)"/>
+                <!-- retained original edge: Tech Enthusiasm → Owns Tesla/EV -->
+                <path class="sge" style="--dl:170;animation-delay:0.4s" d="M107,96 C140,130 170,155 196,171" stroke="#6d28d9" stroke-width="1.4" fill="none" opacity="0.5" marker-end="url(#ab-p)"/>
+                <g class="sgn" style="animation-delay:0.3s" transform="translate(215,186)">
+                  <circle r="24" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+                  <text text-anchor="middle" dy="-3" font-size="8" font-weight="700" fill="#1d4ed8" font-family="system-ui">Owns</text>
+                  <text text-anchor="middle" dy="7" font-size="8" font-weight="700" fill="#1d4ed8" font-family="system-ui">Tesla/EV</text>
+                </g>
+                <!-- ORIGINAL moderator (retained): Household Income moderates Status→Owns Tesla edge -->
+                <line style="--dl:140;animation:sg-edge 0.6s ease 0.9s both" x1="207" y1="61" x2="153" y2="194" stroke="#0891b2" stroke-width="1.2" stroke-dasharray="3,3" opacity="0.65"/>
+                <circle cx="152" cy="195" r="4" fill="#22d3ee" stroke="#0891b2" stroke-width="1.2" opacity="0" style="animation:sg-in 0.3s ease 1.2s both"/>
+                <!-- added-to-graph badge (top-right, clear of the new node) -->
+                <g class="sgf" style="animation-delay:2.6s">
+                  <rect x="296" y="6" width="100" height="22" rx="11" fill="#d1fae5" stroke="#34d399" stroke-width="1"/>
+                  <text x="346" y="21" text-anchor="middle" font-size="9.5" font-weight="700" fill="#065f46" font-family="system-ui">✦ Added to graph</text>
+                </g>
+                <!-- new node appears (behavioral outcome → blue, dashed = provisional) -->
+                <g class="sgw" style="animation-delay:2.2s" transform="translate(330,112)">
+                  <circle r="44" fill="#dbeafe" stroke="#2563eb" stroke-width="2" stroke-dasharray="6,3"/>
+                  <circle r="44" fill="#2563eb" fill-opacity="0.06"/>
+                  <text text-anchor="middle" dy="-10" font-size="9" font-weight="700" fill="#1d4ed8" font-family="system-ui">AR Glasses</text>
+                  <text text-anchor="middle" dy="2" font-size="9" font-weight="700" fill="#1d4ed8" font-family="system-ui">Adoption</text>
+                  <text text-anchor="middle" dy="15" font-size="8" fill="#93c5fd" font-family="system-ui">new node ✦</text>
+                </g>
+                <!-- 64% result badge -->
+                <g class="sgf" style="animation-delay:3.4s" transform="translate(330,112)">
+                  <rect x="-30" y="30" width="60" height="22" rx="11" fill="#2563eb"/>
+                  <text x="0" y="45" text-anchor="middle" font-size="12" font-weight="800" fill="#fff" font-family="system-ui">64%</text>
+                </g>
+                <!-- bottom label -->
+                <text class="sgf" style="animation-delay:3.2s" x="200" y="220" text-anchor="middle" font-size="8.5" fill="#9ca3af" font-family="system-ui">Estimated for this user · added to the model</text>
+              </svg>
+            </div>
+            <div class="sim-steps">
+              <div class="ss"><div class="ss-num b">1</div><div class="ss-body"><div class="ss-title">A question the model hasn't seen before</div><div class="ss-desc"><em>AR Glasses Adoption</em> isn't yet part of what we track for this user.</div></div></div>
+              <div class="ss"><div class="ss-num b">2</div><div class="ss-body"><div class="ss-title">Agent reasons from this user's known profile</div><div class="ss-desc">The agent draws on what it already knows about Alex — Tech Enthusiasm, Status Seeking, Household Income — to estimate the new outcome.</div></div></div>
+              <div class="ss"><div class="ss-num b">3</div><div class="ss-body"><div class="ss-title">Prediction for a new question</div><div class="result-pill b">AR Glasses: 64% · Predicted</div></div></div>
+              <div class="ss"><div class="ss-num b">4</div><div class="ss-body"><div class="ss-title">New pattern added to the model</div><div class="ss-desc">The new pattern is added to the model for future predictions, becoming more reliable as real behavior confirms it.</div><div class="chip-row"><span class="chip chip-n">✦ New node</span><span class="chip chip-i">Individual Graph</span><span class="chip chip-m">Master Graph</span></div></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Tooltip -->
+  <div class="tooltip" id="tooltip">
+    <div class="tt-top"><div class="tt-badge causal" id="tt-badge">Causal</div></div>
+    <div class="tt-arrow-row"><span class="tt-name" id="tt-source"></span><span class="tt-arr" id="tt-arr">→</span><span class="tt-name" id="tt-target"></span></div>
+    <hr class="tt-divider"/>
+    <div class="tt-row" id="tt-beta-row"><span class="tt-rlabel">Relationship strength</span><div class="bbar-wrap"><div class="bbar" id="tt-bar"></div></div><span class="tt-val" id="tt-beta"></span></div>
+    <div id="tt-mod-section"></div>
+    <div id="tt-extra"></div>
+  </div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────
+const nodeData = [
+  {id:"Eco Consciousness",       type:"trait",    r:46},
+  {id:"Price Sensitivity",       type:"trait",    r:44},
+  {id:"Status Seeking",          type:"trait",    r:42},
+  {id:"Tech Enthusiasm",         type:"trait",    r:42},
+  {id:"Impulsivity",             type:"trait",    r:38},
+  {id:"Social Conformity",       type:"trait",    r:42},
+  {id:"Household Income",        type:"context",  r:42},
+  {id:"Has Children",            type:"context",  r:36},
+  {id:"Urban Living",            type:"context",  r:36},
+  {id:"Buys Organic / Natural",  type:"behavior", r:50},
+  {id:"Owns Tesla or EV",        type:"behavior", r:46},
+  {id:"Subscribes to Apple One", type:"behavior", r:50},
+  {id:"Uses Uber Eats Weekly",   type:"behavior", r:48},
+  {id:"Chooses Store Brand",     type:"behavior", r:44},
+  {id:"Posts UGC on Instagram",  type:"behavior", r:48},
+];
+const edgeData = [
+  {source:"Eco Consciousness",  target:"Buys Organic / Natural",  beta: 0.76, type:"causal"},
+  {source:"Eco Consciousness",  target:"Owns Tesla or EV",        beta: 0.61, type:"causal"},
+  {source:"Eco Consciousness",  target:"Chooses Store Brand",     beta:-0.33, type:"causal"},
+  {source:"Price Sensitivity",  target:"Chooses Store Brand",     beta: 0.72, type:"causal"},
+  {source:"Price Sensitivity",  target:"Subscribes to Apple One", beta:-0.45, type:"causal"},
+  {source:"Price Sensitivity",  target:"Uses Uber Eats Weekly",   beta:-0.38, type:"causal"},
+  {source:"Status Seeking",     target:"Owns Tesla or EV",        beta: 0.58, type:"causal", moderatedBy:"Household Income", modBeta:0.41},
+  {source:"Status Seeking",     target:"Subscribes to Apple One", beta: 0.52, type:"causal"},
+  {source:"Status Seeking",     target:"Posts UGC on Instagram",  beta: 0.63, type:"causal"},
+  {source:"Tech Enthusiasm",    target:"Subscribes to Apple One", beta: 0.69, type:"causal"},
+  {source:"Tech Enthusiasm",    target:"Uses Uber Eats Weekly",   beta: 0.44, type:"causal"},
+  {source:"Tech Enthusiasm",    target:"Owns Tesla or EV",        beta: 0.48, type:"causal"},
+  {source:"Impulsivity",        target:"Uses Uber Eats Weekly",   beta: 0.55, type:"causal"},
+  {source:"Impulsivity",        target:"Posts UGC on Instagram",  beta: 0.47, type:"causal"},
+  {source:"Social Conformity",  target:"Posts UGC on Instagram",  beta: 0.58, type:"causal"},
+  {source:"Social Conformity",  target:"Buys Organic / Natural",  beta: 0.40, type:"causal"},
+  {source:"Household Income",   target:"Owns Tesla or EV",        beta: 0.65, type:"causal"},
+  {source:"Household Income",   target:"Subscribes to Apple One", beta: 0.50, type:"causal"},
+  {source:"Has Children",       target:"Buys Organic / Natural",  beta: 0.54, type:"causal"},
+  {source:"Has Children",       target:"Uses Uber Eats Weekly",   beta: 0.42, type:"causal"},
+  {source:"Urban Living",       target:"Uses Uber Eats Weekly",   beta: 0.71, type:"causal"},
+  {source:"Eco Consciousness",  target:"Social Conformity",       beta: 0.35, type:"bidir"},
+  {source:"Status Seeking",     target:"Tech Enthusiasm",         beta: 0.39, type:"bidir"},
+  {source:"Price Sensitivity",  target:"Eco Consciousness",       beta: 0.28, type:"uncertain"},
+  {source:"Impulsivity",        target:"Social Conformity",       beta: 0.31, type:"uncertain"},
+];
+const clamped = {
+  "Eco Consciousness": {value:0.82, label:"High"},
+  "Price Sensitivity": {value:0.31, label:"Low"},
+  "Household Income":  {value:0.78, label:"High"},
+  "Urban Living":      {value:1.0,  label:"Yes"},
+  "Tech Enthusiasm":   {value:0.74, label:"High"},
+};
+const NC={trait:"#7c3aed",behavior:"#2563eb",context:"#059669"};
+const NF={trait:"#ede9fe",behavior:"#dbeafe",context:"#d1fae5"};
+
+// ── GRAPH BUILDER ─────────────────────────────────────────────
+function buildGraph(svgEl, mode){
+  const W=window.innerWidth, H=window.innerHeight;
+  const svg=d3.select(svgEl).attr("viewBox",`0 0 ${W} ${H}`);
+  svg.selectAll("*").remove();
+  const defs=svg.append("defs");
+  [{id:"arr-causal",color:"#6d28d9"},{id:"arr-bidir",color:"#2563eb"},{id:"arr-deact",color:"#c9cdd4"},{id:"arr-neg",color:"#dc2626"}].forEach(m=>{
+    defs.append("marker").attr("id",m.id+"-"+mode).attr("viewBox","0 -5 10 10").attr("refX",9).attr("refY",0).attr("markerWidth",7).attr("markerHeight",7).attr("orient","auto").append("path").attr("d","M0,-4.5L10,0L0,4.5Z").attr("fill",m.color);
+  });
+  const sh=defs.append("filter").attr("id","sh-"+mode);
+  sh.append("feDropShadow").attr("dx",0).attr("dy",2).attr("stdDeviation",4).attr("flood-color","rgba(0,0,0,0.08)");
+  const cg=defs.append("filter").attr("id","cg-"+mode);
+  cg.append("feGaussianBlur").attr("stdDeviation","7").attr("result","b");
+  const cgm=cg.append("feMerge"); cgm.append("feMergeNode").attr("in","b"); cgm.append("feMergeNode").attr("in","SourceGraphic");
+
+  const nodes=nodeData.map(d=>({...d}));
+  const edges=edgeData.map(e=>({...e}));
+  const bEdges=edges.filter(e=>e.type==="bidir");
+  const mEdges=edges.filter(e=>e.moderatedBy);
+
+  const sim=d3.forceSimulation(nodes)
+    .force("link",d3.forceLink(edges).id(d=>d.id).distance(240).strength(0.3))
+    .force("charge",d3.forceManyBody().strength(-900))
+    .force("center",d3.forceCenter(W/2,H/2))
+    .force("collision",d3.forceCollide(d=>d.r+22));
+
+  const eg=svg.append("g");
+  function isD(e){if(mode!=="individual")return false;const t=typeof e.target==="object"?e.target.id:e.target;return clamped[t]!==undefined;}
+  function isCl(id){return mode==="individual"&&clamped[id]!==undefined;}
+  function eStroke(e){if(isD(e))return"#d1d5db";if(e.type==="uncertain")return"#9ca3af";if(e.type==="bidir")return"#2563eb";return e.beta<0?"#dc2626":"#6d28d9";}
+  function eOp(e){return isD(e)?0.35:Math.abs(e.beta)>0.5?0.7:0.45;}
+  function eDash(e){return isD(e)||e.type==="uncertain"?"5,4":null;}
+  function eW(e){return isD(e)?1:Math.abs(e.beta)>0.55?2:1.4;}
+  function eMark(e){if(isD(e))return`url(#arr-deact-${mode})`;if(e.type==="uncertain")return null;if(e.type==="bidir")return`url(#arr-bidir-${mode})`;return e.beta<0?`url(#arr-neg-${mode})`:`url(#arr-causal-${mode})`;}
+  function ns(sx,sy,tx,ty,r){const dx=tx-sx,dy=ty-sy,d=Math.sqrt(dx*dx+dy*dy)||1;return{x:tx-(dx/d)*(r+2),y:ty-(dy/d)*(r+2)};}
+  function aFwd(e){const sx=e.source.x,sy=e.source.y,tx=e.target.x,ty=e.target.y,ep=ns(sx,sy,tx,ty,e.target.r||42),dist=Math.sqrt((tx-sx)**2+(ty-sy)**2);return`M${sx},${sy}A${dist*1.5},${dist*1.5} 0 0,1 ${ep.x},${ep.y}`;}
+  function aRev(e){const sx=e.source.x,sy=e.source.y,tx=e.target.x,ty=e.target.y,ep=ns(tx,ty,sx,sy,e.source.r||42),dist=Math.sqrt((tx-sx)**2+(ty-sy)**2);return`M${tx},${ty}A${dist*1.3},${dist*1.3} 0 0,1 ${ep.x},${ep.y}`;}
+
+  const ep=eg.selectAll("path.ep").data(edges).join("path").attr("class","ep").attr("fill","none");
+  const bp=eg.selectAll("path.bp").data(bEdges).join("path").attr("class","bp").attr("fill","none");
+  const ml=eg.selectAll("line.ml").data(mEdges).join("line").attr("class","ml").attr("stroke","#0891b2").attr("stroke-width",1.5).attr("stroke-dasharray","3,3").attr("opacity",0.6);
+  const md=eg.selectAll("circle.md").data(mEdges).join("circle").attr("class","md").attr("r",4).attr("fill","#22d3ee").attr("stroke","#0891b2").attr("stroke-width",1.5).attr("opacity",0.9);
+  const eh=eg.selectAll("path.eh").data(edges).join("path").attr("class","eh").attr("fill","none").attr("stroke","transparent").attr("stroke-width",22).style("cursor","pointer");
+
+  function applyE(){
+    ep.attr("stroke",eStroke).attr("stroke-width",eW).attr("stroke-opacity",eOp).attr("stroke-dasharray",eDash).attr("marker-end",eMark);
+    bp.attr("stroke",e=>isD(e)?"#d1d5db":"#2563eb").attr("stroke-width",e=>isD(e)?1:1.4).attr("stroke-opacity",e=>isD(e)?0.35:0.45).attr("marker-end",e=>isD(e)?`url(#arr-deact-${mode})`:`url(#arr-bidir-${mode})`);
+  }
+
+  const ng=svg.append("g");
+  const nel=ng.selectAll("g.node").data(nodes).join("g").attr("class","node")
+    .call(d3.drag().on("start",(e,d)=>{if(!e.active)sim.alphaTarget(0.3).restart();d.fx=d.x;d.fy=d.y;}).on("drag",(e,d)=>{d.fx=e.x;d.fy=e.y;}).on("end",(e,d)=>{if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}));
+
+  nel.append("circle").attr("class","cr").attr("r",d=>d.r+8).attr("fill","none").attr("stroke","#7c3aed").attr("stroke-width",2).attr("stroke-dasharray","5,3").attr("opacity",0);
+  nel.append("circle").attr("r",d=>d.r+4).attr("fill","#fff").attr("filter",`url(#sh-${mode})`);
+  nel.append("circle").attr("class","mc").attr("r",d=>d.r).attr("fill",d=>NF[d.type]).attr("stroke",d=>NC[d.type]).attr("stroke-width",1.8);
+  nel.append("circle").attr("class","cf").attr("r",d=>d.r).attr("fill","#7c3aed").attr("fill-opacity",0).attr("filter",`url(#cg-${mode})`);
+  nel.append("text").attr("class","nl").attr("text-anchor","middle").attr("dy","0.35em").attr("fill",d=>NC[d.type]).attr("font-size","11.5px").attr("font-weight","600").attr("font-family","-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif").attr("pointer-events","none")
+    .each(function(d){const w=d.id.split(" ");if(w.length===1){d3.select(this).text(d.id);return;}const h=Math.ceil(w.length/2);d3.select(this).append("tspan").attr("x",0).attr("dy",w.length>2?"-0.6em":"-0.3em").text(w.slice(0,h).join(" "));d3.select(this).append("tspan").attr("x",0).attr("dy","1.2em").text(w.slice(h).join(" "));});
+  nel.append("text").attr("class","cv").attr("text-anchor","middle").attr("fill","#5b21b6").attr("font-size","10px").attr("font-weight","700").attr("font-family","-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif").attr("pointer-events","none").attr("opacity",0);
+
+  function applyN(){
+    nel.select(".cr").attr("opacity",d=>isCl(d.id)?0.8:0);
+    nel.select(".cf").attr("fill-opacity",d=>isCl(d.id)?0.15:0);
+    nel.select(".mc").attr("fill",d=>isCl(d.id)?"#f5f3ff":NF[d.type]).attr("stroke-width",d=>isCl(d.id)?2.5:1.8);
+    nel.select(".nl").attr("fill",d=>isCl(d.id)?"#5b21b6":NC[d.type]);
+    nel.select(".cv").attr("opacity",d=>isCl(d.id)?1:0).text(d=>clamped[d.id]?clamped[d.id].label:"");
+    nel.select(".cv").attr("y",d=>d.r+15);
+  }
+  applyE(); applyN();
+
+  sim.on("tick",()=>{
+    ep.attr("d",aFwd); bp.attr("d",aRev); eh.attr("d",aFwd);
+    ml.each(function(d){
+      const mn=nodes.find(n=>n.id===d.moderatedBy);if(!mn)return;
+      const p=ep.filter(e=>e===d).node();
+      let px=(d.source.x+d.target.x)/2,py=(d.source.y+d.target.y)/2;
+      if(p){try{const l=p.getTotalLength(),pt=p.getPointAtLength(l*0.5);px=pt.x;py=pt.y;}catch(e){}}
+      d3.select(this).attr("x1",mn.x).attr("y1",mn.y).attr("x2",px).attr("y2",py);
+      d._px=px;d._py=py;
+    });
+    md.attr("cx",d=>d._px||(d.source.x+d.target.x)/2).attr("cy",d=>d._py||(d.source.y+d.target.y)/2);
+    nel.attr("transform",d=>`translate(${d.x},${d.y})`);
+  });
+
+  eh.on("mousemove",function(event,d){
+    const tt=document.getElementById("tooltip");
+    const si=d.source.id||d.source,ti=d.target.id||d.target,de=isD(d),b=d.beta,ab=Math.abs(b);
+    const badge=document.getElementById("tt-badge");
+    if(de){badge.textContent="Deactivated";badge.className="tt-badge deact";}
+    else if(d.type==="bidir"){badge.textContent="Bidirectional";badge.className="tt-badge bidir";}
+    else if(d.type==="uncertain"){badge.textContent="Uncertain";badge.className="tt-badge uncertain";}
+    else{badge.textContent="Causal";badge.className="tt-badge causal";}
+    document.getElementById("tt-source").textContent=si;
+    document.getElementById("tt-arr").textContent=d.type==="bidir"?"↔":d.type==="uncertain"?"~":"→";
+    document.getElementById("tt-target").textContent=ti;
+    const br=document.getElementById("tt-beta-row");
+    if(d.type==="uncertain"){br.style.display="none";}
+    else{
+      br.style.display="flex";
+      document.getElementById("tt-beta").textContent=(b<0?"− ":"+ ")+(ab>0.55?"Strong":ab>0.35?"Moderate":"Weak");
+      const bar=document.getElementById("tt-bar");
+      bar.style.width=(ab*100)+"%";
+      bar.style.background=b<0?"linear-gradient(90deg,#fca5a5,#ef4444)":d.type==="bidir"?"linear-gradient(90deg,#93c5fd,#3b82f6)":"linear-gradient(90deg,#c4b5fd,#7c3aed)";
+      bar.style.opacity=de?"0.3":"1";
+    }
+    document.getElementById("tt-mod-section").innerHTML=d.moderatedBy?`<div class="tt-mod-tag">◈ Moderated by: ${d.moderatedBy}</div>`:"";
+    const ex=document.getElementById("tt-extra");
+    if(de){const cv=clamped[ti];ex.innerHTML=`<div class="tt-extra-box deact-info"><b>${ti}</b> is already known (${cv.label}), so it's used directly rather than predicted.</div>`;}
+    else if(d.type==="uncertain"){ex.innerHTML=`<div class="tt-extra-box uncertain-info">Related, but the direction of influence isn't yet established.</div>`;}
+    else if(d.type==="bidir"){ex.innerHTML=`<div class="tt-extra-box" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe">Mutually reinforcing relationship.</div>`;}
+    else if(mode==="individual"&&clamped[si]){ex.innerHTML=`<div class="tt-extra-box clamped-info">📌 ${si} = <b>${clamped[si].label}</b> (measured)</div>`;}
+    else{ex.innerHTML="";}
+    tt.style.left=(event.clientX+16)+"px";tt.style.top=(event.clientY-80)+"px";tt.classList.add("on");
+    d3.select(this.previousSibling).attr("stroke-opacity",1).attr("stroke-width",e=>eW(e)+1);
+  }).on("mouseleave",function(){document.getElementById("tooltip").classList.remove("on");applyE();});
+}
+
+// ── FLYWHEEL ─────────────────────────────────────────────────
+function layoutFlywheel(){
+  const diagram=document.getElementById("fw-diagram");
+  if(!diagram)return;
+  const cw=136, ch=112;
+  const W=diagram.offsetWidth||700, H=Math.max(diagram.offsetHeight||0,300);
+  const cx=W/2, cy=H/2, R=Math.max(70, Math.min(W/2-cw/2-18, H/2-ch/2-18));
+  const svg=document.getElementById("fw-svg");
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  svg.querySelectorAll("path.fw-arc").forEach(p=>p.remove());
+  const centers=[];
+  for(let i=0;i<5;i++){
+    const n=document.getElementById("fwn"+i);
+    const rad=parseFloat(n.dataset.angle)*Math.PI/180;
+    const nx=cx+R*Math.cos(rad), ny=cy+R*Math.sin(rad);
+    n.style.left=(nx-cw/2)+"px"; n.style.top=(ny-ch/2)+"px";
+    centers.push({x:nx,y:ny});
+  }
+  const cl=document.getElementById("fw-center");
+  cl.style.left=(cx-44)+"px"; cl.style.top=(cy-30)+"px";
+  for(let i=0;i<5;i++){
+    const a=centers[i], b=centers[(i+1)%5];
+    const mpx=(a.x+b.x)/2, mpy=(a.y+b.y)/2;
+    const dpx=mpx-cx, dpy=mpy-cy, dl=Math.sqrt(dpx*dpx+dpy*dpy)||1;
+    const cpx=cx+(dpx/dl)*(R*1.12), cpy=cy+(dpy/dl)*(R*1.12);
+    const pad=65;
+    const sd={x:cpx-a.x,y:cpy-a.y}, sl=Math.sqrt(sd.x**2+sd.y**2)||1;
+    const ps={x:a.x+(sd.x/sl)*pad, y:a.y+(sd.y/sl)*pad};
+    const ed={x:b.x-cpx,y:b.y-cpy}, el=Math.sqrt(ed.x**2+ed.y**2)||1;
+    const pe={x:b.x-(ed.x/el)*pad, y:b.y-(ed.y/el)*pad};
+    const path=document.createElementNS("http://www.w3.org/2000/svg","path");
+    path.setAttribute("class","fw-arc");
+    path.setAttribute("d",`M${ps.x},${ps.y} Q${cpx},${cpy} ${pe.x},${pe.y}`);
+    path.setAttribute("fill","none");
+    path.setAttribute("stroke","#c4b5fd");
+    path.setAttribute("stroke-width","2");
+    path.setAttribute("stroke-dasharray","5,4");
+    path.setAttribute("marker-end","url(#fw-arr)");
+    path.setAttribute("opacity","0.8");
+    svg.appendChild(path);
+  }
+}
+
+// ── ANIMATION RESTART ────────────────────────────────────────
+// Store original SVG innerHTML on first access, then replay by resetting.
+const simSvgOriginal={};
+function restartSimAnims(){
+  ["sim-svg-a","sim-svg-b"].forEach(id=>{
+    const svg=document.getElementById(id);
+    if(!svg)return;
+    if(!simSvgOriginal[id])simSvgOriginal[id]=svg.innerHTML;
+    // Clear, force reflow, then restore so CSS animations retrigger
+    svg.innerHTML="";
+    svg.getBoundingClientRect();
+    svg.innerHTML=simSvgOriginal[id];
+  });
+}
+
+let simTimer=null;
+function startSimLoop(){
+  // Capture original HTML after a short render delay
+  setTimeout(()=>{
+    ["sim-svg-a","sim-svg-b"].forEach(id=>{
+      const svg=document.getElementById(id);
+      if(svg&&!simSvgOriginal[id])simSvgOriginal[id]=svg.innerHTML;
+    });
+    restartSimAnims();
+    if(simTimer)clearInterval(simTimer);
+    simTimer=setInterval(restartSimAnims, 6000);
+  }, 150);
+}
+function stopSimLoop(){
+  if(simTimer){clearInterval(simTimer);simTimer=null;}
+}
+
+// ── TABS ─────────────────────────────────────────────────────
+const graphsBuilt={master:false,individual:false};
+function showTab(tab){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById("page-"+tab).classList.add("active");
+  document.querySelector(".tab-btn.t-"+tab).classList.add("active");
+  if(tab==="overview")setTimeout(layoutFlywheel,60);
+  if(tab==="simulation"){startSimLoop();}else{stopSimLoop();}
+  if(tab==="master"&&!graphsBuilt.master){buildGraph(document.getElementById("graph-master"),"master");graphsBuilt.master=true;}
+  if(tab==="individual"&&!graphsBuilt.individual){buildGraph(document.getElementById("graph-individual"),"individual");graphsBuilt.individual=true;}
+}
+window.addEventListener("resize",()=>{if(document.getElementById("page-overview").classList.contains("active"))layoutFlywheel();});
+showTab("overview");
+setTimeout(layoutFlywheel,80);
+</script>
+</body>
+</html>

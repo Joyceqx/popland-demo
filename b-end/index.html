@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Popland — Simulate your market, calibrated to real people</title>
+  <style>
+    :root{
+      --bg:#f4f3f8; --ink:#1a1535; --muted:#6b7280; --faint:#9ca3af; --line:#e5e7eb; --line-soft:#f3f4f6; --card:#fff;
+      --purple:#7c3aed; --purple-d:#5b21b6; --purple-l:#ede9fe; --purple-bd:#c4b5fd;
+      --blue:#2563eb; --blue-d:#1d4ed8; --blue-l:#dbeafe;
+      --green:#059669; --green-d:#065f46; --green-l:#d1fae5;
+      --grad:linear-gradient(135deg,#7c3aed,#2563eb);
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden;}
+    a{text-decoration:none;color:inherit;}
+    .bg-shape{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;}
+    .s1{width:760px;height:760px;background:#ddd6fe;opacity:.45;top:-320px;left:-220px;}
+    .s2{width:560px;height:560px;background:#bfdbfe;opacity:.3;top:380px;right:-180px;}
+
+    /* nav */
+    nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 40px;background:rgba(244,243,248,.85);backdrop-filter:blur(16px);border-bottom:1px solid rgba(99,60,220,.07);}
+    .logo{font-size:20px;font-weight:800;letter-spacing:-.6px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .nav-links{display:flex;align-items:center;gap:30px;}
+    .nav-links a{font-size:14px;font-weight:600;color:var(--muted);transition:color .15s;}
+    .nav-links a:hover{color:var(--ink);}
+    .btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:12px;padding:12px 22px;font-family:inherit;font-size:14.5px;font-weight:700;cursor:pointer;transition:transform .12s,box-shadow .2s;}
+    .btn-primary{background:var(--grad);color:#fff;box-shadow:0 4px 16px rgba(124,58,237,.32);}
+    .btn-primary:hover{box-shadow:0 7px 24px rgba(124,58,237,.45);transform:translateY(-1px);}
+    .btn-ghost{background:#fff;color:#4b5563;border:1.5px solid var(--line);}
+    .btn-ghost:hover{border-color:#cbd0d8;}
+
+    section{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 40px;}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--purple);background:var(--purple-l);padding:6px 14px;border-radius:20px;}
+
+    /* hero */
+    .hero{text-align:center;padding:84px 40px 60px;}
+    .hero h1{font-size:58px;font-weight:800;letter-spacing:-2px;line-height:1.05;margin:22px auto 20px;max-width:840px;}
+    .hero h1 .g{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .hero p{font-size:20px;color:var(--muted);max-width:660px;margin:0 auto 32px;line-height:1.6;}
+    .hero-cta{display:flex;gap:14px;justify-content:center;}
+    .hero-note{margin-top:18px;font-size:13px;color:var(--faint);}
+
+    /* section heads */
+    .sec-head{text-align:center;margin-bottom:44px;}
+    .sec-head h2{font-size:38px;font-weight:800;letter-spacing:-1.2px;margin:14px 0 12px;}
+    .sec-head p{font-size:17.5px;color:var(--muted);max-width:620px;margin:0 auto;line-height:1.6;}
+    .pad{padding:72px 0;}
+
+    /* workflow */
+    .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+    .step{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px 22px;box-shadow:0 1px 4px rgba(0,0,0,.04);position:relative;}
+    .step .n{width:34px;height:34px;border-radius:10px;background:var(--purple-l);color:var(--purple-d);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;margin-bottom:14px;}
+    .step h3{font-size:17px;font-weight:800;margin-bottom:7px;}
+    .step p{font-size:13.5px;color:var(--muted);line-height:1.55;}
+    .step .arrow{position:absolute;right:-13px;top:42px;font-size:18px;color:#c4b5fd;z-index:2;}
+    .step:last-child .arrow{display:none;}
+
+    /* graph block */
+    .graph-block{background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:0 14px 50px rgba(0,0,0,.09);overflow:hidden;}
+    .graph-frame{width:100%;height:660px;border:none;display:block;background:#f4f3f8;}
+    .graph-cap{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-top:1px solid var(--line-soft);background:#fcfcfd;flex-wrap:wrap;gap:10px;}
+    .graph-cap .t{font-size:13.5px;color:var(--muted);}
+    .graph-cap a{font-size:13px;font-weight:700;color:var(--purple-d);}
+    .graph-points{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px;}
+    .gp{padding:6px 4px;}
+    .gp .ic{font-size:22px;}
+    .gp h4{font-size:16px;font-weight:800;margin:8px 0 6px;}
+    .gp p{font-size:13.5px;color:var(--muted);line-height:1.55;}
+
+    /* flow loop caption */
+    .flow-loop{text-align:center;margin:24px auto 0;font-size:13.5px;font-weight:600;color:var(--purple-d);background:var(--purple-l);width:fit-content;padding:9px 18px;border-radius:22px;}
+    /* edge cards */
+    .edge-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+    .ecard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px 22px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+    .ecard .eic{font-size:26px;}
+    .ecard h4{font-size:17px;font-weight:800;margin:12px 0 7px;}
+    .ecard p{font-size:14px;color:var(--muted);line-height:1.55;}
+
+    /* final cta */
+    .final{text-align:center;background:linear-gradient(135deg,#f5f3ff,#eff6ff);border:1px solid var(--purple-bd);border-radius:26px;padding:56px 40px;margin:40px auto 80px;}
+    .final h2{font-size:34px;font-weight:800;letter-spacing:-1px;margin-bottom:14px;}
+    .final p{font-size:17px;color:var(--muted);max-width:540px;margin:0 auto 26px;line-height:1.6;}
+
+    footer{text-align:center;padding:30px;color:var(--faint);font-size:12.5px;position:relative;z-index:1;}
+
+    @media(max-width:880px){
+      .hero h1{font-size:40px;} .flow{grid-template-columns:1fr 1fr;} .step .arrow{display:none;}
+      .graph-points{grid-template-columns:1fr;} .edge-cards{grid-template-columns:1fr;}
+      .nav-links a:not(.btn){display:none;}
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-shape s1"></div>
+  <div class="bg-shape s2"></div>
+
+  <nav>
+    <div class="logo">Popland</div>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#graph">The graph</a>
+      <a href="#edge">Why it's different</a>
+      <a class="btn btn-primary" href="console.html">Enter console →</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <span class="eyebrow">● Behavior Engine · for B-end research</span>
+    <h1>Simulate your market — <span class="g">calibrated to real people.</span></h1>
+    <p>Ask a market-research question and get a grounded answer in minutes. Popland simulates it across calibrated agents built from real, authorized human signal — and tells you exactly how far to trust the result.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="console.html">Enter the console →</a>
+      <a class="btn btn-ghost" href="#how">See how it works</a>
+    </div>
+    <div class="hero-note">Simulation-first · Fidelity-scored · Escalate to agent interviews to raise accuracy</div>
+  </header>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" class="pad">
+    <div class="sec-head">
+      <span class="eyebrow">The workflow</span>
+      <h2>From question to grounded answer</h2>
+      <p>One loop — and every answer feeds back to make the next one sharper.</p>
+    </div>
+    <div class="flow">
+      <div class="step"><div class="n">1</div><h3>Brief</h3><p>State your research question, audience, and context. Drop in personas or past research to ground it.</p><span class="arrow">→</span></div>
+      <div class="step"><div class="n">2</div><h3>Simulate</h3><p>The Behavior Engine combines open data + your context + our causal graph across calibrated agents.</p><span class="arrow">→</span></div>
+      <div class="step"><div class="n">3</div><h3>Read fidelity</h3><p>Get a prediction with a confidence band, key drivers, and a Fidelity Score — how far to trust it.</p><span class="arrow">→</span></div>
+      <div class="step"><div class="n">4</div><h3>Calibrate</h3><p>Low fidelity? Interview matching agents — their answers re-calibrate the graph, so your next simulation is more accurate.</p></div>
+    </div>
+    <div class="flow-loop">↻ Step 4 feeds back into Step 2 — every agent interview makes the next simulation sharper.</div>
+  </section>
+
+  <!-- THE GRAPH -->
+  <section id="graph" class="pad">
+    <div class="sec-head">
+      <span class="eyebrow">Core competitiveness</span>
+      <h2>The causal graph behind every prediction</h2>
+      <p>We don't prompt an agent to "act like a 27-year-old in NYC." We model the population's decision structure as a graph of weighted causal relationships — then personalize it to each user. Explore it live below.</p>
+    </div>
+    <div class="graph-block">
+      <iframe class="graph-frame" src="behavior_graph_public.html" title="Popland Behavior Engine — interactive graph" loading="lazy"></iframe>
+      <div class="graph-cap">
+        <span class="t">Interactive · drag nodes, hover edges. Master graph → individual graph → simulation → flywheel.</span>
+        <a href="behavior_graph_public.html" target="_blank">Open full screen ↗</a>
+      </div>
+    </div>
+    <div class="graph-points">
+      <div class="gp"><div class="ic">🌐</div><h4>Master graph</h4><p>A population-level causal model — traits, context, and behaviors with weighted edges (β) — synthesized from large-scale data and the literature.</p></div>
+      <div class="gp"><div class="ic">👤</div><h4>Individual graph</h4><p>Each user's measured traits are "clamped" in; the rest is inferred from the master graph. The more we measure, the higher the fidelity.</p></div>
+      <div class="gp"><div class="ic">✦</div><h4>In-graph vs. generative</h4><p>Known outcomes resolve through the causal graph with high confidence. Novel "what-ifs" are estimated generatively and added back to the model.</p></div>
+    </div>
+  </section>
+
+  <!-- WHY DIFFERENT -->
+  <section id="edge" class="pad">
+    <div class="sec-head">
+      <span class="eyebrow">Why it's different</span>
+      <h2>Calibrated, not synthetic</h2>
+      <p>Most agent simulation is stale statistical synthesis. Popland's agents are built from real, authorized signal — and get sharper every time you talk to them.</p>
+    </div>
+    <div class="edge-cards">
+      <div class="ecard"><div class="eic">🎯</div><h4>Real signal</h4><p>Built from real, authorized human input — not population averages.</p></div>
+      <div class="ecard"><div class="eic">🔄</div><h4>Always improving</h4><p>Every agent interview re-calibrates the graph, so your simulations get more accurate over time.</p></div>
+      <div class="ecard"><div class="eic">📊</div><h4>Fidelity-scored</h4><p>Each result tells you exactly how far to trust it — no false confidence.</p></div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section>
+    <div class="final">
+      <h2>Run your first study</h2>
+      <p>Define a question, watch it simulate, and see the fidelity. Escalate to interviews when you want more.</p>
+      <a class="btn btn-primary" href="console.html">Enter the console →</a>
+    </div>
+  </section>
+
+  <footer>Popland · Behavior Engine · concept demo</footer>
+</body>
+</html>
