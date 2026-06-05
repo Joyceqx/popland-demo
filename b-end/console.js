@@ -117,7 +117,7 @@ const NAVS = [
 function renderSidebar(){
   $('#sidebar').innerHTML = `
     <a class="sb-logo" href="index.html">Popland</a>
-    <div class="sb-tag">Research Console</div>
+    <div class="sb-tag">for enterprise</div>
     <button class="sb-new" id="sb-new">+ New study</button>
     <nav class="sb-nav">${NAVS.map(n=>`
       <button class="sb-item ${STATE.section===n.k?'on':''}" data-k="${n.k}"><span class="sb-ic">${n.ic}</span>${n.l}</button>`).join('')}</nav>

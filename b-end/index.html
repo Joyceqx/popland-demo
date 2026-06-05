@@ -22,6 +22,8 @@
     /* nav */
     nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 40px;background:rgba(244,243,248,.85);backdrop-filter:blur(16px);border-bottom:1px solid rgba(99,60,220,.07);}
     .logo{font-size:20px;font-weight:800;letter-spacing:-.6px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .brand{display:flex;align-items:baseline;gap:8px;}
+    .logo-tag{font-size:12.5px;font-weight:600;color:var(--faint);letter-spacing:.2px;}
     .nav-links{display:flex;align-items:center;gap:30px;}
     .nav-links a:not(.btn){font-size:14px;font-weight:600;color:var(--muted);transition:color .15s;}
     .nav-links a:not(.btn):hover{color:var(--ink);}
@@ -97,7 +99,7 @@
   <div class="bg-shape s2"></div>
 
   <nav>
-    <div class="logo">Popland</div>
+    <div class="brand"><span class="logo">Popland</span><span class="logo-tag">for enterprise</span></div>
     <div class="nav-links">
       <a href="#how">How it works</a>
       <a href="#graph">The graph</a>
