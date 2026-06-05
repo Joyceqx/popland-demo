@@ -64,6 +64,8 @@ nav{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-con
 .nav-links{display:flex;align-items:center;gap:28px;}
 .nav-links a:not(.btn){font-size:14px;font-weight:600;color:var(--ink-soft);transition:color .15s;}
 .nav-links a:not(.btn):hover{color:var(--ink);}
+.nav-demos{display:flex;align-items:center;gap:8px;}
+.nav-demos .btn{padding:9px 15px;font-size:13px;}
 
 /* hero */
 .hero{padding:clamp(72px,12vw,124px) 0 clamp(40px,6vw,64px);}
@@ -250,6 +252,7 @@ footer .brand{justify-content:center;margin-bottom:14px;}
 }
 @media(max-width:520px){
   .verticals,.loops{grid-template-columns:1fr;}
+  .nav-demos{gap:6px;} .nav-demos .btn{padding:8px 12px;font-size:12px;}
 }
 </style>
 </head>
@@ -262,7 +265,10 @@ footer .brand{justify-content:center;margin-bottom:14px;}
     <a href="#market">The market</a>
     <a href="#howit">How it works</a>
     <a href="#why">Why us</a>
-    <a class="btn btn-primary" href="https://joyceqx.github.io/popland-demo/#both">See the demo →</a>
+    <span class="nav-demos">
+      <a class="btn btn-primary" href="https://joyceqx.github.io/popland-demo/#both" target="_blank" rel="noopener">Consumer ↗</a>
+      <a class="btn btn-spruce" href="https://joyceqx.github.io/popland-demo/b-end/console.html" target="_blank" rel="noopener">Business ↗</a>
+    </span>
   </div>
 </nav>
 
@@ -274,8 +280,8 @@ footer .brand{justify-content:center;margin-bottom:14px;}
     <p class="lede hl h3">Popland is a research platform where everyday people calibrate a personal AI agent that represents their real attitudes and choices, and businesses pay to query it. <b>More honest than a survey, more alive than synthetic data,</b> and revenue-shared with the people it is built from.</p>
     <span class="hero-demos-label hl h4">See it live · both sides</span>
     <div class="hero-cta hl h4" style="margin-top:12px;">
-      <a class="btn btn-primary" href="https://joyceqx.github.io/popland-demo/#both">Consumer app demo ↗</a>
-      <a class="btn btn-spruce" href="https://joyceqx.github.io/popland-demo/b-end/console.html">Business console demo ↗</a>
+      <a class="btn btn-primary" href="https://joyceqx.github.io/popland-demo/#both" target="_blank" rel="noopener">Consumer app demo ↗</a>
+      <a class="btn btn-spruce" href="https://joyceqx.github.io/popland-demo/b-end/console.html" target="_blank" rel="noopener">Business console demo ↗</a>
     </div>
     <a class="hero-jump hl h4" href="#market">See how the two-sided market connects them ↓</a>
     <div class="hero-meta hl h5">
@@ -358,7 +364,7 @@ footer .brand{justify-content:center;margin-bottom:14px;}
           <li><span class="sn">5</span><span>The match updates your Fidelity Score, and your pay.</span></li>
         </ul>
         <div class="note"><b>You cannot game what you cannot see.</b> Answering blind removes the incentive to make your agent look agreeable, so the calibration data stays honest. That is a selling point to businesses, not just a mechanic.</div>
-        <a class="trylink" href="https://joyceqx.github.io/popland-demo/#both">See the consumer app ↗</a>
+        <a class="trylink" href="https://joyceqx.github.io/popland-demo/#both" target="_blank" rel="noopener">See the consumer app ↗</a>
       </div>
       <!-- B product logic -->
       <div class="howcard b reveal d2">
@@ -373,7 +379,7 @@ footer .brand{justify-content:center;margin-bottom:14px;}
           <li><span class="sn">4</span><span><b>Escalate when it matters.</b> Low fidelity or high stakes? Interview the same calibrated people, then re-run with the lift.</span></li>
         </ul>
         <div class="note"><b>Calibrated supply, not a black box.</b> Every answer traces back to real, authorized people whose agents are scored for how well they match them.</div>
-        <a class="trylink" href="https://joyceqx.github.io/popland-demo/b-end/console.html">Open the research console ↗</a>
+        <a class="trylink" href="https://joyceqx.github.io/popland-demo/b-end/console.html" target="_blank" rel="noopener">Open the research console ↗</a>
       </div>
     </div>
   </div>
@@ -515,8 +521,8 @@ footer .brand{justify-content:center;margin-bottom:14px;}
       <h2>The market that is <em>actually made of people.</em></h2>
       <p>See both sides live: the consumer app where people calibrate their Pop, and the research console where businesses query them.</p>
       <div class="hero-cta">
-        <a class="btn btn-primary" href="https://joyceqx.github.io/popland-demo/#both">Open the combined demo →</a>
-        <a class="btn btn-ghost" href="https://joyceqx.github.io/popland-demo/b-end/">For businesses ↗</a>
+        <a class="btn btn-primary" href="https://joyceqx.github.io/popland-demo/#both" target="_blank" rel="noopener">Open the combined demo →</a>
+        <a class="btn btn-ghost" href="https://joyceqx.github.io/popland-demo/b-end/" target="_blank" rel="noopener">For businesses ↗</a>
       </div>
     </div>
   </div>
