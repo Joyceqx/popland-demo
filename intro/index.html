@@ -127,10 +127,10 @@ nav{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-con
 .hub .fid{background:var(--paper-3);border:1px solid var(--line);border-radius:100px;padding:7px 14px;box-shadow:var(--shadow);text-align:center;}
 .hub .fid b{font-family:'Fraunces',serif;font-size:15px;color:var(--spruce);}
 .hub .fid span{display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);}
-.hub .flow{display:flex;flex-direction:column;gap:6px;width:100%;}
-.hub .flow .f{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.04em;text-align:center;padding:6px 8px;border-radius:9px;line-height:1.3;}
-.hub .flow .f.up{background:var(--persimmon-l);color:var(--persimmon-d);}
-.hub .flow .f.down{background:var(--spruce-vl);color:var(--spruce);}
+.hub .flow{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;}
+.hub .fstep{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.02em;text-align:center;padding:6px 10px;border-radius:9px;line-height:1.25;width:100%;background:var(--persimmon-l);color:var(--persimmon-d);}
+.hub .fstep.pay{background:rgba(232,164,39,.2);color:#8a5d0c;font-weight:700;}
+.hub .fto{font-size:11px;line-height:1;color:var(--ink-faint);}
 @keyframes spin{to{transform:rotate(360deg);}}
 
 /* how it works */
@@ -256,8 +256,8 @@ footer .brand{justify-content:center;margin-bottom:14px;}
 }
 @media(max-width:760px){
   .stage,.howit,.adv{grid-template-columns:1fr;}
-  .hub{width:100%;flex-direction:row;flex-wrap:wrap;justify-content:center;order:2;padding:6px 0;}
-  .hub .flow{flex-direction:row;width:auto;}
+  .hub{width:100%;order:2;padding:10px 0;}
+  .hub .flow{max-width:240px;margin:0 auto;}
   .party.c{order:1;} .party.b{order:3;}
   .crow{grid-template-columns:1fr;}
   .crow .old,.crow .new{border-left:none;border-top:1px solid var(--line-2);}
@@ -337,8 +337,11 @@ footer .brand{justify-content:center;margin-bottom:14px;}
         <div class="ring"><div class="pop">Pop<small>YOUR AGENT</small></div></div>
         <div class="fid"><b>Fidelity 0.71</b><span>sets the price</span></div>
         <div class="flow">
-          <div class="f up">↑ authorized signal</div>
-          <div class="f down">↓ pay &amp; insight</div>
+          <span class="fstep">more data</span>
+          <span class="fto">↓</span>
+          <span class="fstep">higher fidelity</span>
+          <span class="fto">↓</span>
+          <span class="fstep pay">you earn more</span>
         </div>
       </div>
       <div class="party b reveal d3">
