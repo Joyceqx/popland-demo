@@ -205,7 +205,7 @@ nav{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-con
 .fw-loopback b{color:var(--gold);}
 
 /* verticals */
-.verticals{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+.verticals{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
 .vert{background:var(--paper-3);border:1px solid var(--line);border-radius:18px;padding:24px 22px;box-shadow:var(--shadow);transition:transform .18s var(--ease),box-shadow .25s var(--ease);}
 .vert:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
 .vert.lead{border-color:rgba(220,63,27,.32);background:linear-gradient(165deg,#FFF1EC,var(--paper-3));}
@@ -213,6 +213,20 @@ nav{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-con
 .vert .ic{font-size:26px;}
 .vert h4{font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin:12px 0 8px;letter-spacing:-.01em;}
 .vert p{font-size:13.5px;color:var(--ink-soft);line-height:1.5;}
+
+/* first commercial wedge (CPG) */
+.wedge{background:linear-gradient(165deg,#E9F2EE,var(--paper-3));border:1px solid rgba(47,110,92,.24);border-radius:24px;padding:clamp(28px,4vw,44px);box-shadow:var(--shadow-lg);position:relative;overflow:hidden;}
+.wedge::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(var(--spruce),var(--gold));}
+.wedge .wedge-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--spruce);}
+.wedge h3{font-family:'Fraunces',serif;font-size:clamp(22px,3.2vw,32px);font-weight:800;letter-spacing:-.015em;line-height:1.1;margin:9px 0 14px;}
+.wedge h3 em{font-style:italic;color:var(--spruce);}
+.wedge > p{font-size:clamp(15px,1.7vw,17px);color:var(--ink-soft);line-height:1.6;max-width:70ch;}
+.wedge > p b{color:var(--ink);font-weight:700;}
+.wedge-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px;}
+.wstat{background:var(--paper-3);border:1px solid var(--line-2);border-radius:16px;padding:18px 20px;}
+.wstat b{display:block;font-family:'Fraunces',serif;font-size:clamp(19px,2.2vw,24px);font-weight:800;color:var(--spruce);letter-spacing:-.01em;line-height:1.05;}
+.wstat span{display:block;font-size:12.5px;color:var(--ink-soft);line-height:1.4;margin-top:7px;}
+.expand-label{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;text-align:center;margin:clamp(32px,5vw,50px) 0 20px;}
 
 /* final cta */
 .final{text-align:center;background:linear-gradient(150deg,#FFF1EC,var(--paper-3) 55%,var(--spruce-vl));border:1px solid var(--line);border-radius:28px;padding:clamp(48px,7vw,80px) clamp(24px,4vw,48px);box-shadow:var(--shadow-lg);}
@@ -251,7 +265,7 @@ footer .brand{justify-content:center;margin-bottom:14px;}
   .crow .dim::before{content:"vs · ";color:var(--ink-faint);}
 }
 @media(max-width:520px){
-  .verticals,.loops{grid-template-columns:1fr;}
+  .verticals,.loops,.wedge-stats{grid-template-columns:1fr;}
   .nav-demos{gap:6px;} .nav-demos .btn{padding:8px 12px;font-size:12px;}
 }
 </style>
@@ -497,18 +511,30 @@ footer .brand{justify-content:center;margin-bottom:14px;}
   </div>
 </section>
 
-<!-- VERTICALS -->
+<!-- FIRST CUSTOMERS -->
 <section class="pad" id="verticals" style="padding-top:0;">
   <div class="wrap">
     <div class="shead reveal">
-      <div class="idx">05 / Where we start</div>
-      <h2>We do not boil the ocean.</h2>
-      <p>We enter through high-value verticals where realistic, varied human behavior is worth paying for. Gaming is the first wedge: inside a game sandbox, the player's decisions are the calibration data and the playtest result at the same time.</p>
+      <div class="idx">05 / Our first customers</div>
+      <h2>Consumer brands, <em>and the agencies that serve them.</em></h2>
+      <p>The consumer insight research these teams run today is slow, expensive, and demographically narrow. That gap is exactly where we start.</p>
     </div>
+
+    <div class="wedge reveal d1">
+      <span class="wedge-tag">First commercial wedge</span>
+      <h3>The focus group, <em>simulated in hours.</em></h3>
+      <p>Consumer packaged goods (CPG) companies and brand strategy agencies pay <b>$10K to $50K</b> for a single focus group or qualitative study, and still get a slow, demographically limited sample. Popland agents, calibrated to real individual behavioral profiles, simulate diverse consumer responses to product concepts, messaging, and pricing in <b>hours rather than weeks</b>. These buyers have high willingness to pay, run research on a recurring cycle, and actively want faster, more cost-efficient insight, which makes them the ideal first commercial wedge.</p>
+      <div class="wedge-stats">
+        <div class="wstat"><b>$10K to $50K</b><span>per focus group or qual study they pay today, for a slow, narrow sample</span></div>
+        <div class="wstat"><b>Hours, not weeks</b><span>from a brief to simulated responses on concepts, messaging, and pricing</span></div>
+        <div class="wstat"><b>Recurring, high WTP</b><span>ongoing research cycles and a strong appetite for cheaper insight</span></div>
+      </div>
+    </div>
+
+    <div class="expand-label reveal">And the same engine extends to</div>
     <div class="verticals">
-      <div class="vert lead reveal d1"><span class="vbadge">First wedge</span><div class="ic">🎮</div><h4>Gaming</h4><p>Player clones test numeric balance and difficulty. The sandbox is calibration and playtesting in one experience.</p></div>
-      <div class="vert reveal d1"><div class="ic">🏷️</div><h4>Brand &amp; pricing</h4><p>Model churn among price-sensitive segments when a brand raises prices or changes a product.</p></div>
-      <div class="vert reveal d2"><div class="ic">📊</div><h4>Finance &amp; insurance</h4><p>Simulate how people react under financial stress for more resilient actuarial models.</p></div>
+      <div class="vert reveal d1"><div class="ic">🎮</div><h4>Gaming</h4><p>Player clones test numeric balance and difficulty. The sandbox is calibration and playtesting in one experience.</p></div>
+      <div class="vert reveal d1"><div class="ic">📊</div><h4>Finance &amp; insurance</h4><p>Simulate how people react under financial stress for more resilient actuarial models.</p></div>
       <div class="vert reveal d2"><div class="ic">🧬</div><h4>Precision health</h4><p>Authorized clones simulate adherence and lifestyle change under diet or drug interventions.</p></div>
     </div>
   </div>
