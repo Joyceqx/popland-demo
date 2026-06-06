@@ -161,9 +161,11 @@ nav{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-con
 
 /* why us / advantages */
 .adv{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start;}
+.adv-col{display:flex;flex-direction:column;gap:22px;}
 .advcard{background:var(--paper-3);border:1px solid var(--line);border-radius:22px;padding:32px clamp(24px,3vw,34px);box-shadow:var(--shadow);}
 .advcard .an{font-family:'Fraunces',serif;font-style:italic;font-size:40px;line-height:1;color:var(--persimmon);opacity:.32;}
 .advcard.two .an{color:var(--spruce);}
+.advcard.three .an{color:var(--gold);}
 .advcard h3{font-family:'Fraunces',serif;font-size:23px;font-weight:800;letter-spacing:-.01em;line-height:1.13;margin:8px 0 12px;}
 .advcard p{font-size:14.5px;color:var(--ink-soft);line-height:1.55;}
 .graphviz{margin:18px 0 16px;background:linear-gradient(160deg,var(--paper-2),var(--paper-3));border:1px solid var(--line-2);border-radius:14px;padding:12px 12px 6px;}
@@ -407,14 +409,21 @@ footer .brand{justify-content:center;margin-bottom:14px;}
   <div class="wrap">
     <div class="shead reveal">
       <div class="idx">03 / Why us</div>
-      <h2>Two advantages, <em>put together for the first time.</em></h2>
-      <p>One keeps the supply fresh. The other makes the simulation defensible. Neither is about out-engineering anyone.</p>
+      <h2>Three advantages, <em>put together for the first time.</em></h2>
+      <p>One keeps the supply fresh, one makes the simulation defensible, and one lets you move between a whole market and a single person. None of it is about out-engineering anyone.</p>
     </div>
     <div class="adv">
+      <div class="adv-col">
       <div class="advcard one reveal d1">
         <div class="an">01</div>
         <h3>An approachable app that makes calibration a daily habit.</h3>
         <p>Everyone else captures behavioral data once, in a long interview or a scraped dump, then watches it go stale. Our app is easy enough to open every day, so the signal stays current. That daily loop is what makes the two-sided market run: people keep calibrating, and businesses keep getting answers that reflect right now, not last year.</p>
+      </div>
+      <div class="advcard three reveal d3">
+        <div class="an">03</div>
+        <h3>The population and the individual, at once.</h3>
+        <p>Most tools pick a side: a macro forecast of a whole segment, or a single digital twin. Popland runs both in one system. The master graph captures population-level patterns, while each calibrated agent is a real individual. So you can query a whole segment as a sandbox population, or drill into one person, without switching models or tools.</p>
+      </div>
       </div>
       <div class="advcard two reveal d2">
         <div class="an">02</div>
