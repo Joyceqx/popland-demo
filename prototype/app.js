@@ -25,7 +25,7 @@ const AVATARS = [
   'linear-gradient(150deg,#4a8fd8,#245fb0)',
   'linear-gradient(150deg,#e36f9e,#c4477b)',
 ];
-const popName = () => S.popName || 'Pop';
+const popName = () => S.popName || 'Popie';
 const orb = (px,extra='') => `<div class="orb" style="width:${px}px;height:${px}px;background:${AVATARS[S.popAvatar||0]};${extra}">${popMini(Math.round(px*0.66))}</div>`;
 
 /* ---------- content ---------- */
@@ -44,7 +44,7 @@ const INTERVIEW = [
   { q:"A shiny new gadget drops. You…",              tag:'with new things', cat:'Consumer', o:['Pre-order day one','Wait for the reviews','Wait for the price to drop','I don’t really do gadgets'] },
   { q:"Your money, in one line:",                    tag:'money is for',    cat:'Values',   o:['Save for security','Spend on experiences','Invest for growth','Treat myself, often'] },
   { q:"A brand you use raises prices 20%. You…",     tag:'when prices rise', cat:'Consumer', o:['Switch right away','Grumble but stay','Honestly won’t notice','Depends if I love it'] },
-  { q:"New restaurant — you order…",                 tag:'ordering food',   cat:'Habits',   o:['My safe usual','The weirdest thing on the menu','Whatever’s popular','Ask the server to pick'] },
+  { q:"New restaurant, you order…",                 tag:'ordering food',   cat:'Habits',   o:['My safe usual','The weirdest thing on the menu','Whatever’s popular','Ask the server to pick'] },
   { q:"When the group can’t decide, you…",           tag:'in a group',      cat:'Values',   o:['Take charge','Go with the flow','Quietly steer it','Stay out of it'] },
   { q:"Sharing your data for rewards feels…",        tag:'on privacy',      cat:'Values',   o:['Totally fine','Fine if anonymized','Only with clear consent','I’d rather not'] },
   { q:"Mornings, you’re…",                           tag:'mornings',        cat:'Habits',   o:['Up at dawn, ready','A few snoozes','Not a morning person','Depends on my sleep'] },
@@ -64,7 +64,7 @@ const ALIGN = [
   { q:'For an $80 purchase you usually…',             o:['Buy on impulse','Skim a review or two','Research thoroughly','Sleep on it'] },
   { q:'Your ideal weekend leans…',                    o:['Social & out','Cozy at home','Productive projects','Outdoors & active'] },
   { q:'An “eco-friendly” label makes you…',           o:['Much more likely to buy','A bit more likely','No difference','Skeptical'] },
-  { q:'New tech gadgets — you’re usually…',           o:['First to try','Early-ish','Wait and see','Last to adopt'] },
+  { q:'New tech gadgets, you’re usually…',           o:['First to try','Early-ish','Wait and see','Last to adopt'] },
   { q:'Dining out, you…',                             o:['Order your usual','Try something new','Ask for a recommendation','Pick the popular dish'] },
   { q:'If money got tight, the subscription you’d keep…', o:['Streaming','Music','Fitness / health','News / learning'] },
   { q:'A friend asks for honest feedback. You…',      o:['Give it straight','Soften it a lot','Focus on positives','Avoid the topic'] },
@@ -74,19 +74,19 @@ const ALIGN_STMTS = [
   'Pop thinks you value experiences over owning more things.',
   'Pop reads you as price-conscious, but loyal to brands you love.',
   'Pop sees you as a curious early adopter who still checks the reviews.',
-  'Pop thinks you lead quietly — steering a group without taking over.',
+  'Pop thinks you lead quietly, steering a group without taking over.',
   'Pop believes you guard your privacy and want clear consent.',
 ];
 
 const DEEP = [
   { q:'When you picture “enough” money, what does it buy you?', o:['Peace of mind','Time freedom','Helping family','Bigger risks'], pop:1, why:'You lean toward autonomy and experiences over accumulation.' },
-  { q:'A decision you regret — was it acting too fast or too slow?', o:['Too fast','Too slow','Neither','Both, often'], pop:1, why:'Your answers suggest you deliberate, sometimes past the moment.' },
+  { q:'A decision you regret, was it acting too fast or too slow?', o:['Too fast','Too slow','Neither','Both, often'], pop:1, why:'Your answers suggest you deliberate, sometimes past the moment.' },
   { q:'What would actually make you leave a brand you love?', o:['Price hikes','Values mismatch','A better option','Bad service'], pop:1, why:'You said you’d pay more for value-aligned brands.' },
   { q:'In a group, the role you naturally slip into…', o:['The driver','The glue','The skeptic','The quiet observer'], pop:1, why:'You tend to steer gently rather than take charge.' },
   { q:'After a brutal week, you recharge by…', o:['Treating yourself','Rest & quiet','Being with people','Starting something new'], pop:1, why:'You seem to refill inwardly more than outwardly.' },
-  { q:'A risk you’d take if no one judged you…', o:['Quit and travel','Start a business','Move abroad','Stay — I’m happy'], pop:1, why:'You value security, but crave one bold project.' },
+  { q:'A risk you’d take if no one judged you…', o:['Quit and travel','Start a business','Move abroad','Stay, I’m happy'], pop:1, why:'You value security, but crave one bold project.' },
   { q:'What do you quietly want people to notice about you?', o:['My taste','My work','My kindness','My independence'], pop:3, why:'Your choices point to prizing independence.' },
-  { q:'Honest feedback to a friend — how do you give it?', o:['Straight','Gently','Mostly positive','I avoid it'], pop:0, why:'You said you give it straight.' },
+  { q:'Honest feedback to a friend, how do you give it?', o:['Straight','Gently','Mostly positive','I avoid it'], pop:0, why:'You said you give it straight.' },
   { q:'The purchase that says the most about you?', o:['Books / learning','Travel','Tech','Home & comfort'], pop:1, why:'Experiences edge out objects for you.' },
   { q:'Ten years out, success looks like…', o:['Financial freedom','Mastery at my craft','Strong relationships','Adventure & novelty'], pop:2, why:'Relationships rank high in how you describe yourself.' },
 ];
@@ -97,28 +97,28 @@ const OPPS = [
   { id:'o2', org:'Lumi',         lg:'✦', bg:'#c86b8e', vt:'CPG · skincare', mode:'apply', title:'React to three new serum concepts', reward:1.10, time:'4 min', match:78 },
   { id:'o3', org:'PixelForge',   lg:'◆', bg:'#3a4ec8', vt:'Gaming',        mode:'open',  title:'Rate a new level-difficulty curve', reward:0.55, time:'3 min', match:85 },
   { id:'o4', org:'NorthBank',    lg:'$', bg:'#2f6e5c', vt:'Finance',       mode:'apply', title:'Attitudes toward automatic retirement savings', reward:1.40, time:'6 min', match:71 },
-  { id:'o5', org:'Metro Transit',lg:'⊕', bg:'#d98a2b', vt:'Civic',         mode:'open',  title:'Park vs. parking — vote on a city block', reward:0.30, time:'2 min', match:88 },
+  { id:'o5', org:'Metro Transit',lg:'⊕', bg:'#d98a2b', vt:'Civic',         mode:'open',  title:'Park vs. parking, vote on a city block', reward:0.30, time:'2 min', match:88 },
   { id:'o6', org:'Verde Foods',  lg:'❧', bg:'#4f8a3a', vt:'CPG · food',    mode:'open',  title:'Would you buy a plant-based version of your usual snack?', reward:0.65, time:'3 min', match:81 },
 ];
 /* invitations: mode 'direct' (Pop can answer from what it knows) or 'input' (needs your answers first) */
 const INVITES = [
   { id:'t1', org:'Lumi',      lg:'✦', bg:'#c86b8e', mode:'input',  title:'Skincare habits interview', desc:'Lumi hand-picked your profile. They want details Pop doesn’t fully know yet.', reward:2.00 },
-  { id:'t2', org:'NorthBank', lg:'$', bg:'#2f6e5c', mode:'direct', title:'Financial decision-making study', desc:'Pop already knows enough to represent you here — send it straight over.', reward:2.50 },
+  { id:'t2', org:'NorthBank', lg:'$', bg:'#2f6e5c', mode:'direct', title:'Financial decision-making study', desc:'Pop already knows enough to represent you here, send it straight over.', reward:2.50 },
 ];
 const FLOW = {
   o1:[ {q:'At $4.95 for your usual latte, you…',o:['Buy as always','Buy less often','Switch to drip coffee','Go somewhere else']},
-       {q:'What would keep you loyal?',o:['Loyalty perks','Better taste','Nothing — price wins','Convenience']} ],
+       {q:'What would keep you loyal?',o:['Loyalty perks','Better taste','Nothing, price wins','Convenience']} ],
   o2:[ {q:'How often do you try new skincare?',o:['Rarely, I’m loyal','When something runs out','Often','Only on a rec']},
        {q:'A serum costs 2× your usual. You…',o:['Skip it','Buy if reviews rave','Buy if ingredients justify','Splurge']} ],
   o3:[ {q:'You hit a hard level 4 times. You…',o:['Keep grinding','Look up a guide','Lower difficulty','Quit the game']},
        {q:'What makes a game “fair”?',o:['Skill always wins','Some luck is fine','Generous checkpoints','Tough but learnable']} ],
   o4:[ {q:'Auto 5% retirement deduction feels…',o:['Smart, opt me in','Fine if I can opt out','Too much now','I’d rather choose']},
        {q:'Found $1,000. You…',o:['Save it','Invest it','Treat yourself','Pay down debt']} ],
-  o5:[ {q:'This city block should become…',o:['A pocket park','More parking','Mixed — a bit of both','Housing']},
+  o5:[ {q:'This city block should become…',o:['A pocket park','More parking','Mixed, a bit of both','Housing']},
        {q:'How do you usually get around?',o:['Drive','Transit','Bike / walk','Rideshare']} ],
   o6:[ {q:'A plant-based version of your snack?',o:['Definitely try it','If it tastes the same','If it’s cheaper','Stick with original']},
        {q:'“Plant-based” on a label makes you…',o:['More likely to buy','No difference','Slightly skeptical','Avoid it']} ],
-  t1:[ {q:'How often do you change skincare products?',o:['Rarely — I’m loyal','When something runs out','Often — I love trying','Only on a recommendation']},
+  t1:[ {q:'How often do you change skincare products?',o:['Rarely, I’m loyal','When something runs out','Often, I love trying','Only on a recommendation']},
        {q:'What makes you switch a brand?',o:['Price','Ingredients','A friend’s rec','An ad / influencer']},
        {q:'Where do you buy skincare?',o:['Drugstore','Sephora / Ulta','Online / DTC','Wherever’s cheapest']},
        {q:'Fragrance in skincare?',o:['Love it','Don’t care','Prefer fragrance-free','Avoid it']},
@@ -129,8 +129,8 @@ const taskMeta = id => INVITES.find(t=>t.id===id) || OPPS.find(o=>o.id===id);
 
 const ACTIVITY = [
   { t:`<b>Pop</b> answered Daily Brew’s pricing question on your behalf`, time:'2h' },
-  { t:`<b>Lumi</b> invited you to a skincare interview — $2.00`, time:'1d', action:{label:'Accept', flow:'t1'} },
-  { t:`You reached <b>Trusted</b> fidelity — higher-paying tasks unlocked`, time:'2d' },
+  { t:`<b>Lumi</b> invited you to a skincare interview, $2.00`, time:'1d', action:{label:'Accept', flow:'t1'} },
+  { t:`You reached <b>Trusted</b> fidelity, higher-paying tasks unlocked`, time:'2d' },
   { t:`<b>Pop</b> voted “pocket park” in a city-planning sandbox`, time:'3d' },
 ];
 const WALLET = [
@@ -143,7 +143,7 @@ const WALLET = [
 /* ---------- state ---------- */
 const S = {
   page:'home', buildView:'overview',
-  popName:'Pop', popAvatar:0,
+  popName:'Popie', popAvatar:0,
   // seeded so a returning user's Pop already has a personality (placeholder data)
   demo:{ dob:'1997-04-12', sex:'Female', loc:'Palo Alto, CA', race:'Asian', edu:'Master’s', work:'Product manager', income:'$100–150k', marital:'Single' },
   answers:{ 0:1, 1:1, 2:1, 3:1, 4:1, 5:2, 6:2, 7:1 },
@@ -177,7 +177,7 @@ const nextMilestone = f => MILESTONES.find(m => m > f) || null;
 const activeTier = f => { let t = TIERS[0]; for (const x of TIERS) if (f >= x.min) t = x; return t; };
 function ringNote(f){
   const avg = avgPerTask(f); const m = nextMilestone(f);
-  if (!m) return `At <b>${f}%</b> fidelity, ${popName()} earns about <b>$${avg}</b> per task — the top of the range.`;
+  if (!m) return `At <b>${f}%</b> fidelity, ${popName()} earns about <b>$${avg}</b> per task, the top of the range.`;
   return `At <b>${f}%</b> fidelity, ${popName()} earns about <b>$${avg}</b> per task on average. Reach <b>${m}%</b> and that rises to about <b>$${avgPerTask(m)}</b>.`;
 }
 const demoPct = () => Math.round(Object.values(S.demo).filter(Boolean).length / DEMO.length * 100);
@@ -239,7 +239,7 @@ function renderMain(){
 function ringHTML(f){ return `<div class="ring" style="--p:0"><div><div class="num" id="ringNum">${f}<small>%</small></div><div class="cap">Fidelity</div></div></div>`; }
 function nextGoalInner(f){
   const m = nextMilestone(f);
-  if (!m) return `<span class="ng-k">Top tier reached</span><span class="ng-v">~$${avgPerTask(f)}/task — the best your Pop earns</span>`;
+  if (!m) return `<span class="ng-k">Top tier reached</span><span class="ng-v">~$${avgPerTask(f)}/task, the best your Pop earns</span>`;
   return `<span class="ng-k">Next goal</span><span class="ng-v">Reach <b>${m}%</b> → about <b>$${avgPerTask(m)}</b>/task</span><span class="ng-bar"><i style="width:${Math.round(f/m*100)}%"></i></span>`;
 }
 function fidPanel(f, withGrowth){
@@ -254,15 +254,15 @@ function fidPanel(f, withGrowth){
 function homePage(){
   const f = fidelity();
   const cards = [
-    { t:'Add your basics', p:'Standard demographics — the research backbone of your Pop.', pct:demoPct(), lift:'foundation', cta:demoPct()?'Continue':'Start', ic:`<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18"/><path d="M8 4v16"/>` },
+    { t:'Add your basics', p:'Standard demographics, the research backbone of your Pop.', pct:demoPct(), lift:'foundation', cta:demoPct()?'Continue':'Start', ic:`<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18"/><path d="M8 4v16"/>` },
     { t:'Finish your interview', p:'8 quick taps on your values, habits and taste.', pct:intPct(), lift:'+32% fidelity', cta:intDone()?'Continue':'Start', ic:`<path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/>` },
-    { t:'Link what you have', p:'LinkedIn, Instagram, MBTI, past surveys — link or screenshot.', pct:connPct(), lift:'+ up to 31%', cta:connCount()?'Add more':'Connect', ic:`<path d="M9 12a3 3 0 0 0 3 3l3-3a3 3 0 0 0-3-3"/><path d="M15 12a3 3 0 0 0-3-3l-3 3a3 3 0 0 0 3 3"/>` },
+    { t:'Link what you have', p:'LinkedIn, Instagram, MBTI, past surveys, link or screenshot.', pct:connPct(), lift:'+ up to 31%', cta:connCount()?'Add more':'Connect', ic:`<path d="M9 12a3 3 0 0 0 3 3l3-3a3 3 0 0 0-3-3"/><path d="M15 12a3 3 0 0 0-3-3l-3 3a3 3 0 0 0 3 3"/>` },
   ];
   const done = cards.filter(c=>c.pct===100).length;
   return `<div class="stagger">
     <section class="hello">
       <div><h1>Welcome back, Joyce.</h1>
-        <p>Build a second you — an agent that answers questions for businesses, with your permission. The better it knows you, the more it earns <em class="muted">while you rest.</em></p></div>
+        <p>Build a second you, an agent that answers questions for businesses, with your permission. The better it knows you, the more it earns <em class="muted">while you rest.</em></p></div>
       <div class="pip-hi">${popMini(48)}<span>I’m <b>${popName()}</b>, your agent. Teach me, and I’ll go earn for you.</span></div>
     </section>
 
@@ -306,7 +306,7 @@ function buildOverview(){
   const f = fidelity();
   return `<div class="stagger">
     <div class="page-head"><span class="eyebrow">Your Pop · lives here</span>
-      <h1 class="display">Meet <em>${popName()}</em> — the second you.</h1>
+      <h1 class="display">Meet <em>${popName()}</em>, the second you.</h1>
       <p>This is ${popName()}’s home: who it knows you to be, and where you keep sharpening it. Edit anything, anytime.</p></div>
     <div class="build-grid">
       <div>
@@ -319,7 +319,7 @@ function buildOverview(){
         </div>
 
         <div class="sect">
-          <div class="sect-head"><span class="n" style="background:rgba(36,26,17,.08);color:var(--ink)">i</span>
+          <div class="sect-head"><span class="n" style="background:rgba(27,42,34,.08);color:var(--ink)">i</span>
             <span class="meta"><span class="t">What ${popName()} knows about you</span><span class="d">An objective summary of your basics</span></span>
             <button class="lift" style="cursor:pointer;border:0;background:none;color:var(--persimmon-d);font-weight:700" data-bview="edit">Edit</button></div>
           ${profileStatement()}
@@ -333,12 +333,12 @@ function buildOverview(){
   </div>`;
 }
 function popVibe(f){
-  if (!hasProfile()) return `${popName()} is brand new — teach it your basics to give it a personality.`;
+  if (!hasProfile()) return `${popName()} is brand new, teach it your basics to give it a personality.`;
   const bits = [];
   if (S.answers[3]!==undefined) bits.push(['price-sensitive','sticky-but-grumbly','price-insensitive','selectively loyal'][S.answers[3]]);
   if (S.answers[2]!==undefined) bits.push(['security-minded','experience-driven','a growth investor','self-rewarding'][S.answers[2]]);
   if (S.answers[1]!==undefined) bits.push(['an early adopter','a careful researcher','a deal-waiter','gadget-indifferent'][S.answers[1]]);
-  return bits.length ? `${popName()} reads you as <b>${bits.join('</b>, <b>')}</b> — and gets sharper every time you align.` : `${popName()} is learning your patterns — try a few alignment checks below.`;
+  return bits.length ? `${popName()} reads you as <b>${bits.join('</b>, <b>')}</b>, and gets sharper every time you align.` : `${popName()} is learning your patterns, try a few alignment checks below.`;
 }
 function profileStatement(){
   const d = S.demo;
@@ -356,7 +356,7 @@ function profileStatement(){
   if (d.income) seg2.push(`household income <b>${d.income}</b>`);
   if (d.marital) seg2.push(`<b>${d.marital.toLowerCase()}</b>`);
   if (seg2.length) s += `Education: ${seg2.join('; ')}.`;
-  return `<p class="statement">${s || 'Your basics are partly filled — add more in Edit setup.'}</p>${knowsBlock()}`;
+  return `<p class="statement">${s || 'Your basics are partly filled, add more in Edit setup.'}</p>${knowsBlock()}`;
 }
 function knowsBlock(){
   const labels = { Values:'Core values', Habits:'Habits & routine', Consumer:'Consumer style' };
@@ -374,8 +374,8 @@ function growthPath(f){
     { t:'Pop created', done:true, s:'day one' },
     { t:'Basics added', done:demoPct()===100, s:`${demoPct()}%` },
     { t:'Interview complete', done:intComplete(), s:`${intDone()}/8` },
-    { t:'First resource linked', done:connCount()>0, s:connCount()?`${connCount()} linked`:'—' },
-    { t:'Deep talk with Pop', done:deepDone()>0, s:deepDone()?`${deepDone()} done`:'—' },
+    { t:'First resource linked', done:connCount()>0, s:connCount()?`${connCount()} linked`:', ' },
+    { t:'Deep talk with Pop', done:deepDone()>0, s:deepDone()?`${deepDone()} done`:', ' },
     { t:'Reach Trusted (60%)', done:f>=60, s:`${f}%` },
   ];
   return miles.map(m=>`<div class="milerow ${m.done?'done':''}"><span class="mt">${m.t}</span><span class="ms">${m.done?'✓ ':''}${m.s}</span></div>`);
@@ -388,7 +388,7 @@ function sectAlignment(){
     <span class="lift">+6% / round</span></div>`;
   if (S.alignJustSubmitted){
     return `<div class="sect">${head}
-      <div class="align-done"><div class="ck">✓</div><div><b>Nice — submitted.</b> <span class="muted">${popName()} just got sharper. Come back anytime for three fresh checks.</span></div></div>
+      <div class="align-done"><div class="ck">✓</div><div><b>Nice, submitted.</b> <span class="muted">${popName()} just got sharper. Come back anytime for three fresh checks.</span></div></div>
       <div class="align-foot"><button class="btn btn-spruce btn-sm" data-alignrefresh>Refresh 3 new questions</button>
         <button class="btn btn-ghost btn-sm" data-deepstart>🗣 Have a deep talk with ${popName()} →</button></div></div>`;
   }
@@ -403,11 +403,11 @@ function sectAlignment(){
   const stmtCard = `<div class="al-q stmt"><div class="qx"><span class="qn">3</span>${stmt}</div>
     <div class="rate-label">How accurate is that, 1–5?</div>
     <div class="rate">${dots}</div>
-    <textarea rows="2" placeholder="Tell ${popName()} why — what did it get right or wrong? (optional)" data-alignstmtnote>${S.alignStmtNote||''}</textarea></div>`;
+    <textarea rows="2" placeholder="Tell ${popName()} why, what did it get right or wrong? (optional)" data-alignstmtnote>${S.alignStmtNote||''}</textarea></div>`;
   const ready = mc.every(i => S.alignBatch[i]!==undefined) && S.alignStmtRate>0;
   const cnt = mc.filter(i=>S.alignBatch[i]!==undefined).length + (S.alignStmtRate>0?1:0);
   return `<div class="sect">${head}
-    <p class="muted" style="font-size:13.5px;margin:-8px 0 16px">Two quick picks, then rate how well ${popName()} reads you. Submit all three together — each round sharpens your agent.</p>
+    <p class="muted" style="font-size:13.5px;margin:-8px 0 16px">Two quick picks, then rate how well ${popName()} reads you. Submit all three together, each round sharpens your agent.</p>
     ${mcCards}${stmtCard}
     <div class="align-foot">
       <button class="btn btn-primary btn-sm ${ready?'':'is-disabled'}" data-alignsubmit>${ready?'Submit · +6%':`Answer all 3 (${cnt}/3)`}</button>
@@ -420,14 +420,14 @@ function buildEdit(){
   return `<div class="stagger">
     <div class="edit-bar"><button class="back" data-bview="overview">← Back to your Pop</button><span class="eyebrow">One-time setup</span></div>
     <div class="page-head"><h1 class="display">Set up <em>${popName()}.</em></h1>
-      <p>Name your agent, then teach it who you are. You only do this once — afterwards it lives on your Pop page, editable anytime.</p></div>
+      <p>Name your agent, then teach it who you are. You only do this once, afterwards it lives on your Pop page, editable anytime.</p></div>
     <div class="build-grid">
       <div>
         ${sectNameAvatar()}
         ${sectDemographics()}
         ${sectInterview()}
         ${sectResources()}
-        <button class="btn btn-primary btn-block btn-lg" style="margin-top:6px" data-bview="overview">Done — view your Pop</button>
+        <button class="btn btn-primary btn-block btn-lg" style="margin-top:6px" data-bview="overview">Done, view your Pop</button>
       </div>
       ${fidPanel(fidelity(), false)}
     </div>
@@ -481,7 +481,7 @@ function interviewSummary(){
   return `<div class="int-summary fade">
     <p class="statement" style="margin-bottom:14px">${popVibe(fidelity())}</p>
     <div class="qlist">${quotes}</div>
-    <p class="muted" style="font-size:12.5px;margin:12px 0 14px">This is how ${popName()} reads your values — in your own words. Something off?</p>
+    <p class="muted" style="font-size:12.5px;margin:12px 0 14px">This is how ${popName()} reads your values, in your own words. Something off?</p>
     <button class="btn btn-ghost btn-sm" data-intedit>✎ Edit my answers</button>
   </div>`;
 }
@@ -500,12 +500,12 @@ function sectResources(){
     <span class="acts"><select data-mbti style="font:inherit;font-weight:700;font-size:12.5px;padding:9px 11px;border-radius:100px;border:1px solid var(--line);background:var(--paper-2);color:var(--ink)">
       <option value="" ${!S.mbti?'selected':''}>Type</option>${MBTI_TYPES.map(t=>`<option ${t===S.mbti?'selected':''}>${t}</option>`).join('')}</select></span></div>`;
   const shield = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 3v6c0 4-3 7-8 9-5-2-8-5-8-9V6Z"/></svg>`;
-  return `<div class="sect">${sectHead(3,'Other resources','Bring data you already have — by link or screenshot',connPct(),'+ up to 31%')}
+  return `<div class="sect">${sectHead(3,'Other resources','Bring data you already have, by link or screenshot',connPct(),'+ up to 31%')}
     ${rows}${mbti}<div class="consent">${shield}<span>You authorize each source. Data is de-identified, used only to calibrate your agent, and you can revoke anytime.</span></div></div>`;
 }
 
 /* ============================================================
-   DEEP TALK — separate page
+   DEEP TALK, separate page
    ============================================================ */
 function deepTalkPage(){
   const total = DEEP.length;
@@ -515,7 +515,7 @@ function deepTalkPage(){
     return `<div class="deep">
       <div class="deep-head"><button class="back" data-deepend>← Back to your Pop</button><span class="deep-count">${total} of ${total} · talk complete</span></div>
       <div class="deep-final fade">${orb(96)}<h1>That was a real talk.</h1>
-        <p>You worked through ${total} deep questions with ${popName()}. Each one pushed your fidelity up — ${popName()} understands you a lot better now.</p>
+        <p>You worked through ${total} deep questions with ${popName()}. Each one pushed your fidelity up, ${popName()} understands you a lot better now.</p>
         <button class="btn btn-primary" data-deepend>See your Pop</button></div></div>`;
   }
   const q = DEEP[idx];
@@ -539,18 +539,18 @@ function deepTalkPage(){
             <div class="cmp pop"><div class="who">${popMini(16)} ${popName()} guessed</div><div class="ans">${q.o[q.pop]}</div></div>
           </div>
           <div class="deep-reason"><b>${popName()}’s reasoning:</b> ${q.why}</div>
-          <div class="verdict ${matched?'match':'miss'}">${matched?'✓ Pop read you right':'✕ Pop missed — your feedback recalibrates it'}</div>
+          <div class="verdict ${matched?'match':'miss'}">${matched?'✓ Pop read you right':'✕ Pop missed, your feedback recalibrates it'}</div>
 
           <div class="rate-label">How well did ${popName()} capture you?</div>
           <div class="rate">${dots}</div>
 
           <div class="fb">
-            <textarea rows="2" placeholder="Tell ${popName()} why — the more honest, the smarter it gets…" data-deepnote="${idx}">${S.deepNote[idx]||''}</textarea>
+            <textarea rows="2" placeholder="Tell ${popName()} why, the more honest, the smarter it gets…" data-deepnote="${idx}">${S.deepNote[idx]||''}</textarea>
             <button class="mic ${S.deepRecording?'rec':''}" data-deepvoice title="Voice feedback">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
             </button>
           </div>
-          ${S.deepRecording?`<div class="rec-note fade">● Listening… <span class="muted">(demo — tap mic to stop)</span></div>`:''}
+          ${S.deepRecording?`<div class="rec-note fade">● Listening… <span class="muted">(demo, tap mic to stop)</span></div>`:''}
 
           <div class="deep-foot">
             ${idx>=total-1
@@ -573,7 +573,7 @@ function explorePage(){
   return `<div class="stagger">
     <div class="page-head"><span class="eyebrow">Explore · sent by businesses</span>
       <h1 class="display">Find work for <em>${popName()}.</em></h1>
-      <p>Businesses post questions they’ll pay to have answered. Send your agent, do it yourself, or sign up for selective studies — if they pick you, you’re in. All matched to how well ${popName()} knows you.</p></div>
+      <p>Businesses post questions they’ll pay to have answered. Send your agent, do it yourself, or sign up for selective studies, if they pick you, you’re in. All matched to how well ${popName()} knows you.</p></div>
     <div class="toolbar">
       <div class="tabs">${tabs.map(([k,l])=>`<button class="${S.exploreTab===k?'on':''}" data-exploretab="${k}">${l}</button>`).join('')}</div>
       <span class="auto">Let ${popName()} auto-explore<button class="toggle ${S.autoExplore?'on':''}" data-auto></button></span>
@@ -590,7 +590,7 @@ function oppCard(o){
   let acts;
   if (o.mode==='apply'){
     acts = applied
-      ? `<span class="sent-flag">✓ Signed up — ${o.org} will notify you if you’re picked</span>`
+      ? `<span class="sent-flag">✓ Signed up, ${o.org} will notify you if you’re picked</span>`
       : `<button class="btn btn-primary btn-sm" data-oppapply="${o.id}">Sign up</button>
          <button class="save ${saved?'on':''}" data-oppsave="${o.id}" title="Save">${heart}</button>`;
   } else {
@@ -639,12 +639,12 @@ function tasksPage(){
     body = completedList.length ? completedList.map(c=>`<div class="invite done"><span class="lg" style="background:${c.bg}">${c.lg}</span>
       <div class="body"><div class="org">${c.org}${c.via?' · '+c.via:''}</div><h3>${c.title}</h3></div>
       <div class="right"><span class="completed">✓ Done</span><span class="muted" style="font-size:12px">+$${(c.amt||0).toFixed(2)}</span></div></div>`).join('')
-      : `<p class="muted center" style="padding:40px">Nothing completed yet — accept an invitation or send ${popName()} from Explore.</p>`;
+      : `<p class="muted center" style="padding:40px">Nothing completed yet, accept an invitation or send ${popName()} from Explore.</p>`;
   }
   return `<div class="stagger">
     <div class="page-head"><span class="eyebrow">Tasks</span>
       <h1 class="display">Invitations <em>just for you.</em></h1>
-      <p>Businesses can invite your profile directly. Some, ${popName()} can answer on its own; others need a little input from you first — then your upgraded Pop goes with the answers.</p></div>
+      <p>Businesses can invite your profile directly. Some, ${popName()} can answer on its own; others need a little input from you first, then your upgraded Pop goes with the answers.</p></div>
     <div class="subtabs">${tabs.map(([k,l])=>`<button class="${S.tasksTab===k?'on':''}" data-taskstab="${k}">${l}</button>`).join('')}</div>
     ${body}<div class="spacer"></div>
   </div>`;
@@ -656,14 +656,14 @@ function flowPage(){
   if (S.flowDone){
     return `<div class="flow flow-success fade">${orb(90)}
       <h1>Sent. Nice work.</h1><div class="amt">+$${meta.reward.toFixed(2)}</div>
-      <p>A calibrated copy of ${popName()} — tuned to you — is on its way to <b>${meta.org}</b>.</p>
+      <p>A calibrated copy of ${popName()}, tuned to you, is on its way to <b>${meta.org}</b>.</p>
       <button class="btn btn-primary" data-flowexit>Back to ${S.flowReturn==='explore'?'Explore':S.flowReturn==='home'?'Home':'Tasks'}</button></div>`;
   }
   const i = S.flowIdx; const q = qs[i]; const pct = Math.round(i/qs.length*100);
   const isInvite = INVITES.some(t => t.id === S.flow);
   const intro = isInvite
     ? `Before ${popName()} heads to ${meta.org}, answer a few questions so it represents you accurately.`
-    : `You’re answering this one yourself for ${meta.org}. Your replies go straight to them — and teach ${popName()} for next time.`;
+    : `You’re answering this one yourself for ${meta.org}. Your replies go straight to them, and teach ${popName()} for next time.`;
   return `<div class="flow fade">
     <div class="flow-head"><div class="org">${meta.org}</div><h1>${meta.title}</h1>
       <div class="pay">Earn $${meta.reward.toFixed(2)} · ${qs.length} questions</div>

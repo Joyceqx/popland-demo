@@ -1,5 +1,5 @@
 /* ============================================================
-   POPLAND · mobile — "Tune your Pop"  (vanilla JS, no build)
+   POPLAND · mobile, "Tune your Popie"  (vanilla JS, no build)
    Tabs: Tune (swipe deck) · Tasks · Me
    ============================================================ */
 
@@ -17,22 +17,22 @@ const popMini = px => POP.replace('class="pip"', `class="pip" style="width:${px}
 
 /* ---------- the deck: swipe statements + scenario MC ---------- */
 const CARDS = [
-  { type:'swipe', tag:'Habits',   emoji:'💬', q:'You’d rather text than call — almost always.' },
+  { type:'swipe', tag:'Habits',   emoji:'💬', q:'You’d rather text than call, almost always.' },
   { type:'swipe', tag:'Consumer', emoji:'⭐', q:'You read the reviews before most purchases.' },
   { type:'mc',    tag:'Pricing',  q:'A coffee you love raises its price 20%. You…', o:['Switch brands','Cut back but stay','Pay it, no big deal','Stop buying it'] },
   { type:'swipe', tag:'Values',   emoji:'🌱', q:'You’d pay more for a brand that shares your values.' },
-  { type:'mc',    tag:'Lifestyle',q:'Free Friday night — the real you?', o:['Out with friends','Cozy at home','A side project','Depends on my mood'] },
+  { type:'mc',    tag:'Lifestyle',q:'Free Friday night, the real you?', o:['Out with friends','Cozy at home','A side project','Depends on my mood'] },
   { type:'swipe', tag:'Consumer', emoji:'📱', q:'You’re usually first of your friends to try new tech.' },
   { type:'mc',    tag:'Money',    q:'You find $500 you’d forgotten about. You…', o:['Save it','Treat yourself','Invest it','Pay down debt'] },
   { type:'swipe', tag:'Values',   emoji:'✈️', q:'You prefer experiences over owning more things.' },
-  { type:'mc',    tag:'Habits',   q:'New restaurant — you order…', o:['My usual safe pick','The weirdest thing','What’s popular','Ask the server'] },
+  { type:'mc',    tag:'Habits',   q:'New restaurant, you order…', o:['My usual safe pick','The weirdest thing','What’s popular','Ask the server'] },
   { type:'swipe', tag:'Habits',   emoji:'📥', q:'A messy inbox genuinely stresses you out.' },
 ];
 const STOPS = [4, 8];          // show a progress beat after this many answered
 
 const TASKS = [
-  { id:'t1', org:'Lumi',       lg:'✦', bg:'#c86b8e', t:'Skincare habits — quick interview', d:'Lumi hand-picked your profile. 6 short questions.', rew:2.00 },
-  { id:'t2', org:'Daily Brew', lg:'☕', bg:'#5b3a29', t:'Latte pricing reaction', d:'Pop can answer this from what it knows. Just send it.', rew:0.80 },
+  { id:'t1', org:'Lumi',       lg:'✦', bg:'#c86b8e', t:'Skincare habits, quick interview', d:'Lumi hand-picked your profile. 6 short questions.', rew:2.00 },
+  { id:'t2', org:'Daily Brew', lg:'☕', bg:'#5b3a29', t:'Latte pricing reaction', d:'Popie can answer this from what it knows. Just send it.', rew:0.80 },
   { id:'t3', org:'NorthBank',  lg:'$', bg:'#2f6e5c', t:'Money decision study', d:'How you weigh risk and savings. 5 questions.', rew:2.50 },
 ];
 
@@ -87,7 +87,7 @@ function hud(){
 }
 
 /* ============================================================
-   TUNE — the swipe deck
+   TUNE, the swipe deck
    ============================================================ */
 function tuneScreen(){
   if (S.interAt !== null) return hud() + interBeat();
@@ -100,7 +100,7 @@ function tuneScreen(){
       <button class="sa-like" data-swipe="right" aria-label="That's me">♥</button>
     </div>` : '';
   return hud() + `<div class="tune">
-    <div class="tune-head"><span class="eyebrow">Tune your Pop</span>
+    <div class="tune-head"><span class="eyebrow">Tune your Popie</span>
       <h1>Is this you?</h1>
       <div class="counter">card ${S.idx+1} of ${CARDS.length}</div></div>
     <div class="deck">${back}${cardHTML(c)}</div>
@@ -129,8 +129,8 @@ function interBeat(){
     ${popMini(96)}
     <div class="big">${f}%</div><div class="lbl">persona fidelity</div>
     <div class="gain-bar"><i style="width:0" data-grow="${f}"></i></div>
-    <h2>Nice — Pop knows you better.</h2>
-    <p>Keep tuning. The higher your fidelity, the more your Pop earns when it works for you.</p>
+    <h2>Nice, Popie knows you better.</h2>
+    <p>Keep tuning. The higher your fidelity, the more your Popie earns when it works for you.</p>
     <div class="earn-teaser">now ~$${avgPerTask(f)} / task →  $${avgPerTask(Math.min(99,f+20))} at higher fidelity</div>
     <button class="btn btn-primary btn-block" data-continue>Keep tuning →</button>
   </div>`;
@@ -142,7 +142,7 @@ function doneBeat(){
     <div class="big">${f}%</div><div class="lbl">persona fidelity</div>
     <div class="gain-bar"><i style="width:0" data-grow="${f}"></i></div>
     <h2>That’s a sharper you.</h2>
-    <p>Your Pop is ready to earn. Check Tasks to send it out — or keep tuning anytime to push fidelity higher.</p>
+    <p>Your Popie is ready to earn. Check Tasks to send it out, or keep tuning anytime to push fidelity higher.</p>
     <div class="earn-teaser">earning power: ~$${avgPerTask(f)} / task</div>
     <button class="btn btn-primary btn-block" data-gotasks>See my tasks (${openTasks()})</button>
     <button class="btn btn-ghost btn-block" style="margin-top:10px" data-restart>Tune more</button>
@@ -153,10 +153,10 @@ function doneBeat(){
 function tasksScreen(){
   return `<div class="page fade">
     <h1>Tasks</h1>
-    <p class="sub">Businesses want your Pop. Accept to earn — decline anything that’s not for you.</p>
+    <p class="sub">Businesses want your Popie. Accept to earn, decline anything that’s not for you.</p>
     ${TASKS.map(t=>{
       const st=S.tasks[t.id];
-      const body = st ? `<div class="resolved-flag ${st==='acc'?'acc':'dec'}">${st==='acc'?`✓ Accepted — Pop sent · +$${t.rew.toFixed(2)}`:'✕ Declined'}</div>`
+      const body = st ? `<div class="resolved-flag ${st==='acc'?'acc':'dec'}">${st==='acc'?`✓ Accepted, Popie sent · +$${t.rew.toFixed(2)}`:'✕ Declined'}</div>`
         : `<div class="acts">
             <button class="btn btn-ghost" data-decline="${t.id}">Decline</button>
             <button class="btn btn-spruce" data-accept="${t.id}">Accept · $${t.rew.toFixed(2)}</button></div>`;
@@ -179,16 +179,16 @@ function meScreen(){
   return `<div class="page fade">
     <div class="me-hero">
       <div class="orb" style="background:radial-gradient(80% 120% at 70% 0%,rgba(232,164,39,.45),transparent 60%),linear-gradient(150deg,#2f6e5c,#234f43)">${popMini(60)}</div>
-      <div class="nm">Pop</div>
+      <div class="nm">Popie</div>
       <div class="pills"><span class="pill pill-spruce">${f}% fidelity</span><span class="pill pill-gold">~$${avgPerTask(f)}/task</span><span class="pill pill-ink">$${S.earnings.toFixed(2)} earned</span></div>
     </div>
-    <div class="me-card"><h3>What Pop knows about you</h3>
+    <div class="me-card"><h3>What Popie knows about you</h3>
       ${grp('Values',PERSONA.values,'t')}${grp('Habits',PERSONA.habits,'t')}${grp('Interests',PERSONA.interests)}
       <button class="btn btn-ghost btn-block" style="margin-top:6px;font-size:14px" data-tab="tune">Tune to improve →</button>
     </div>
     <div class="me-card"><h3>Settings</h3>
       ${set('notif','Push notifications','New tasks & milestones',`🔔`)}
-      ${set('autosend','Auto-send Pop','Accept high-match tasks for me',`🤖`)}
+      ${set('autosend','Auto-send Popie','Accept high-match tasks for me',`🤖`)}
       ${set('private','Private mode','Hide profile from new businesses',`🔒`)}
       <div class="setrow"><span class="si">📄</span><span class="st">Your basics<small>Birth date, location, education…</small></span><span style="color:var(--ink-faint)">›</span></div>
     </div>
