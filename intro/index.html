@@ -98,7 +98,7 @@ nav{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-con
 .pad{padding:clamp(44px,6vw,84px) 0;}
 
 /* how it works */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
 .step{background:var(--paper-3);border:1px solid var(--line);border-radius:18px;padding:26px 24px;box-shadow:var(--shadow);position:relative;}
 .step .n{width:36px;height:36px;border-radius:11px;background:var(--forest-l);color:var(--forest-d);display:grid;place-items:center;font-family:'Fraunces',serif;font-weight:800;font-size:17px;margin-bottom:14px;}
 .step h3{font-family:'Fraunces',serif;font-size:19px;font-weight:700;margin-bottom:8px;letter-spacing:-.01em;}
@@ -149,11 +149,12 @@ footer .brand{justify-content:center;margin-bottom:14px;}
 @media(prefers-reduced-motion:reduce){.reveal,.hl{opacity:1!important;transform:none!important;animation:none!important;}}
 
 @media(max-width:880px){
-  .steps{grid-template-columns:1fr;} .step .arr{display:none;}
+  .steps{grid-template-columns:repeat(2,1fr);} .step .arr{display:none;}
   .who{grid-template-columns:1fr;}
   .nav-links a:not(.btn){display:none;}
 }
 @media(max-width:600px){
+  .steps{grid-template-columns:1fr;}
   .nav-demos{gap:6px;} .nav-demos .btn{padding:8px 12px;font-size:12px;}
 }
 </style>
@@ -208,12 +209,13 @@ footer .brand{justify-content:center;margin-bottom:14px;}
     <div class="shead reveal">
       <div class="idx">How it works</div>
       <h2>From what you care about, <em>to a voice that counts.</em></h2>
-      <p>Popland connects two sides: people who share their real preferences, and businesses who want to understand them. Here is the whole loop, in three steps.</p>
+      <p>Popland connects two sides: people who share their real preferences, and businesses who want to understand them. Here is the whole loop, in four steps.</p>
     </div>
     <div class="steps">
       <div class="step reveal d1"><div class="n">1</div><h3>Build your Popie</h3><p>Share your real preferences, a little at a time. Popland turns them into <b>your Popie</b>, a personal AI that represents you.</p><span class="arr">→</span></div>
       <div class="step reveal d2"><div class="n">2</div><h3>Your Popie speaks for you</h3><p>Choose the areas you want a say in. When a business wants to understand people, <b>your Popie answers in your place, in your interest.</b></p><span class="arr">→</span></div>
-      <div class="step reveal d3"><div class="n">3</div><h3>Heard, and understood</h3><p>You get a voice in the decisions that affect you. Businesses get <b>honest, current insight from real people,</b> not guesses.</p></div>
+      <div class="step reveal d3"><div class="n">3</div><h3>Heard, and understood</h3><p>You get a voice in the decisions that affect you. Businesses get <b>honest, current insight from real people,</b> not guesses.</p><span class="arr">→</span></div>
+      <div class="step reveal d3"><div class="n">4</div><h3>And you get something back</h3><p>Being heard is the point, but not the whole of it. Your Popie can move a cause you believe in forward, <b>bring you benefits in the things you care about,</b> and earn you a little along the way. What comes back follows what you value.</p></div>
     </div>
   </div>
 </section>
