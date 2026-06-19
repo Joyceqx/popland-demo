@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Popland · become more yourself, and let it count</title>
-<meta name="description" content="Popland is a connector, not a replacement. We do not copy what you can do. We grow the part of you that cannot be copied, your values and judgment, into a living persona that represents you and acts in your name. The person is the principal, not the product."/>
+<title>Popland · a voice for every person, real insight for every business</title>
+<meta name="description" content="Popland builds each person a personal AI, a Popie, from the preferences they share. Your Popie speaks for you in the products and decisions you care about, so businesses understand what real people want, and people finally get a say. We don't replace people. We get them heard."/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%231F6E5A'/%3E%3Ccircle cx='21' cy='21' r='5' fill='%23D99A2B'/%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -14,9 +14,8 @@
   --paper:#F1EEE3; --paper-2:#F8F5EC; --paper-3:#FFFDF7;
   --ink:#1B2A22; --ink-soft:#54605A; --ink-faint:#8B948C;
   --forest:#1F6E5A; --forest-d:#134C3B; --forest-l:#E3EFE9; --forest-bd:#A9D2C2;
-  --moss:#5AA988; --moss-l:#CFE6DA;
+  --moss:#5AA988;
   --gold:#D99A2B; --gold-d:#A9761A; --gold-l:#F6E9CC;
-  --clay:#C2683F; --clay-l:#F2E0D6;
   --line:rgba(27,42,34,.12); --line-2:rgba(27,42,34,.07);
   --shadow:0 4px 14px rgba(27,42,34,.07),0 14px 40px rgba(27,42,34,.09);
   --shadow-lg:0 12px 34px rgba(27,42,34,.12),0 30px 70px rgba(27,42,34,.16);
@@ -28,9 +27,9 @@ body{
   font-family:'Hanken Grotesk',system-ui,sans-serif;color:var(--ink);line-height:1.5;
   -webkit-font-smoothing:antialiased;overflow-x:hidden;
   background:
-    radial-gradient(55vw 45vw at 100% -8%,rgba(217,154,43,.16),transparent 60%),
-    radial-gradient(50vw 48vw at -8% 6%,rgba(31,110,90,.15),transparent 60%),
-    radial-gradient(60vw 55vw at 60% 112%,rgba(90,169,136,.15),transparent 60%),
+    radial-gradient(55vw 45vw at 100% -8%,rgba(217,154,43,.15),transparent 60%),
+    radial-gradient(50vw 48vw at -8% 6%,rgba(31,110,90,.14),transparent 60%),
+    radial-gradient(60vw 55vw at 60% 112%,rgba(90,169,136,.14),transparent 60%),
     var(--paper);
   background-attachment:fixed;
 }
@@ -39,7 +38,7 @@ a{color:inherit;text-decoration:none;}
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E");}
 
 .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--forest);}
-.wrap{position:relative;z-index:2;max-width:1140px;margin:0 auto;padding:0 clamp(20px,5vw,48px);}
+.wrap{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:0 clamp(20px,5vw,48px);}
 .idx{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--ink-faint);display:flex;align-items:center;gap:10px;}
 .idx::after{content:"";flex:1;height:1px;background:var(--line);}
 section{position:relative;z-index:2;}
@@ -48,8 +47,6 @@ section{position:relative;z-index:2;}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(19,76,59,.4);}
 .btn-gold{background:var(--gold);color:#3a2a08;box-shadow:0 4px 16px rgba(169,118,26,.3);}
 .btn-gold:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(169,118,26,.42);}
-.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);}
-.btn-ghost:hover{border-color:var(--ink);background:rgba(27,42,34,.03);}
 
 /* nav */
 nav{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:20px;
@@ -62,134 +59,101 @@ nav{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-con
 .brand .mark::after{content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:var(--gold);right:6px;bottom:6px;}
 .brand .name{font-family:'Fraunces',serif;font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--forest-d);}
 .brand .name span{color:var(--gold-d);}
-.nav-links{display:flex;align-items:center;gap:28px;}
+.nav-links{display:flex;align-items:center;gap:26px;}
 .nav-links a:not(.btn){font-size:14px;font-weight:600;color:var(--ink-soft);transition:color .15s;}
 .nav-links a:not(.btn):hover{color:var(--ink);}
 .nav-demos{display:flex;align-items:center;gap:8px;}
 .nav-demos .btn{padding:9px 15px;font-size:13px;}
 
 /* hero */
-.hero{padding:clamp(70px,11vw,120px) 0 clamp(36px,6vw,60px);}
-.hero .inner{max-width:940px;}
+.hero{padding:clamp(66px,10vw,108px) 0 clamp(28px,4vw,44px);}
+.hero .inner{max-width:920px;}
 .hero .eyebrow{display:inline-flex;align-items:center;gap:9px;}
 .hero .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px var(--gold-l);}
-.hero h1{font-family:'Fraunces',serif;font-weight:800;letter-spacing:-.025em;line-height:1.0;
-  font-size:clamp(40px,7vw,82px);margin:22px 0 26px;}
+.hero h1{font-family:'Fraunces',serif;font-weight:800;letter-spacing:-.025em;line-height:1.03;
+  font-size:clamp(38px,6.4vw,76px);margin:20px 0 24px;}
 .hero h1 em{font-style:italic;color:var(--forest);}
-.hero .lede{font-size:clamp(17px,2.1vw,21px);color:var(--ink-soft);max-width:66ch;line-height:1.55;}
+.hero .lede{font-size:clamp(17px,2.1vw,21px);color:var(--ink-soft);max-width:64ch;line-height:1.55;}
 .hero .lede b{color:var(--ink);font-weight:600;}
-.hero-demos-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--ink-faint);margin-top:34px;display:block;}
+.hero-demos-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--ink-faint);margin-top:32px;display:block;}
 .hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px;}
 .hero-jump{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-size:14px;font-weight:600;color:var(--ink-soft);transition:color .15s;}
 .hero-jump:hover{color:var(--ink);}
-.hero-meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:38px;}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:34px;}
 .hero-meta span{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:8px;}
 .hero-meta span::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--forest);}
 
-/* manifesto band */
-.manifesto-wrap{padding:clamp(20px,4vw,40px) 0 clamp(40px,6vw,72px);}
-.manifesto{background:linear-gradient(160deg,#1a5b49,var(--forest-d));color:#EAF3EE;border-radius:28px;padding:clamp(40px,6vw,72px) clamp(26px,5vw,64px);position:relative;overflow:hidden;box-shadow:var(--shadow-lg);}
-.manifesto svg.wind{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.5;}
-.manifesto .inner2{position:relative;z-index:1;max-width:760px;}
-.manifesto .ml{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--gold);}
-.manifesto blockquote{font-family:'Fraunces',serif;font-weight:700;letter-spacing:-.015em;line-height:1.14;font-size:clamp(26px,4.2vw,46px);margin:18px 0 22px;}
-.manifesto blockquote em{font-style:italic;color:var(--gold-l);}
-.manifesto .sup{font-size:clamp(15px,1.8vw,18px);color:rgba(234,243,238,.82);line-height:1.6;max-width:62ch;}
-.manifesto .sup b{color:#fff;font-weight:600;}
+/* mission line */
+.mission{text-align:center;padding:clamp(20px,3vw,32px) 0 clamp(40px,6vw,64px);}
+.mission .ml{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-d);font-weight:600;}
+.mission p{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(21px,3vw,33px);line-height:1.22;letter-spacing:-.01em;max-width:740px;margin:14px auto 0;color:var(--forest-d);}
+.mission p em{font-style:italic;color:var(--gold-d);}
 
 /* section heads */
-.shead{max-width:800px;margin-bottom:clamp(32px,5vw,50px);}
-.shead h2{font-family:'Fraunces',serif;font-weight:800;letter-spacing:-.02em;line-height:1.05;
-  font-size:clamp(30px,4.4vw,50px);margin:16px 0 14px;}
+.shead{max-width:780px;margin-bottom:clamp(30px,4.5vw,46px);}
+.shead h2{font-family:'Fraunces',serif;font-weight:800;letter-spacing:-.02em;line-height:1.06;
+  font-size:clamp(28px,4.2vw,46px);margin:14px 0 12px;}
 .shead h2 em{font-style:italic;color:var(--forest);}
-.shead p{font-size:clamp(16px,1.8vw,18.5px);color:var(--ink-soft);line-height:1.55;max-width:62ch;}
-.pad{padding:clamp(50px,7vw,92px) 0;}
+.shead p{font-size:clamp(15.5px,1.7vw,18px);color:var(--ink-soft);line-height:1.55;max-width:60ch;}
+.pad{padding:clamp(44px,6vw,84px) 0;}
 
-/* popie / build */
-.build{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(26px,4vw,52px);align-items:center;}
-.build .copy p{font-size:16px;color:var(--ink-soft);line-height:1.6;margin-bottom:18px;}
-.build .copy p b{color:var(--ink);font-weight:700;}
-.note-card{background:var(--paper-3);border:1px solid var(--line);border-left:4px solid var(--forest);border-radius:0 16px 16px 0;padding:18px 20px;box-shadow:var(--shadow);margin-top:6px;}
-.note-card p{font-size:14.5px;color:var(--ink-soft);line-height:1.55;margin:0;}
-.note-card b{color:var(--forest-d);}
-.viz-card{background:linear-gradient(165deg,var(--forest-l),var(--paper-3));border:1px solid var(--forest-bd);border-radius:24px;padding:30px clamp(20px,3vw,34px);box-shadow:var(--shadow);}
-.viz-card svg{width:100%;height:auto;display:block;}
-.viz-cap{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:var(--ink-soft);text-align:center;margin-top:14px;}
-.viz-cap b{color:var(--forest-d);}
+/* how it works */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.step{background:var(--paper-3);border:1px solid var(--line);border-radius:18px;padding:26px 24px;box-shadow:var(--shadow);position:relative;}
+.step .n{width:36px;height:36px;border-radius:11px;background:var(--forest-l);color:var(--forest-d);display:grid;place-items:center;font-family:'Fraunces',serif;font-weight:800;font-size:17px;margin-bottom:14px;}
+.step h3{font-family:'Fraunces',serif;font-size:19px;font-weight:700;margin-bottom:8px;letter-spacing:-.01em;}
+.step p{font-size:14.5px;color:var(--ink-soft);line-height:1.55;}
+.step p b{color:var(--ink);font-weight:700;}
+.step .arr{position:absolute;right:-13px;top:40px;color:var(--forest-bd);font-size:18px;z-index:3;}
+.step:last-child .arr{display:none;}
 
-/* compare */
-.compare{background:var(--paper-3);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow-lg);}
-.crow{display:grid;grid-template-columns:0.9fr 1fr 1.15fr;}
-.crow:not(:last-child){border-bottom:1px solid var(--line-2);}
-.crow>div{padding:17px clamp(16px,2.4vw,28px);font-size:14.5px;display:flex;align-items:center;}
-.crow .dim{font-weight:700;color:var(--ink);}
-.crow .old{color:var(--ink-soft);border-left:1px solid var(--line-2);}
-.crow .new{color:var(--forest-d);font-weight:600;background:linear-gradient(120deg,var(--forest-l),rgba(227,239,233,.4));border-left:1px solid var(--line-2);}
-.crow.head .dim,.crow.head .old{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;}
-.crow.head .new{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--forest);font-weight:700;}
-
-/* the land */
-.land .shead h2 em{color:var(--gold-d);}
-.land-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
-.lcard{background:var(--paper-3);border:1px solid var(--line);border-radius:20px;padding:26px 24px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
-.lcard .lic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;margin-bottom:14px;background:var(--forest-l);}
-.lcard h3{font-family:'Fraunces',serif;font-size:20px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px;}
-.lcard p{font-size:14.5px;color:var(--ink-soft);line-height:1.55;}
-.lcard p b{color:var(--ink);font-weight:700;}
-.land-foot{display:flex;align-items:center;gap:clamp(20px,3vw,40px);margin-top:clamp(28px,4vw,44px);flex-wrap:wrap;}
-.land-foot .tree{flex:none;}
-.land-foot .ln{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(18px,2.4vw,26px);color:var(--forest-d);font-weight:600;line-height:1.3;max-width:30ch;}
-
-/* three layers */
-.layers{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-.layer{background:var(--paper-3);border:1px solid var(--line);border-radius:20px;padding:28px 24px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
-.layer::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;}
-.layer.soc::before{background:var(--forest);} .layer.biz::before{background:var(--gold);} .layer.sci::before{background:var(--clay);}
-.layer .lk{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;}
-.layer.soc .lk{color:var(--forest);} .layer.biz .lk{color:var(--gold-d);} .layer.sci .lk{color:var(--clay);}
-.layer h3{font-family:'Fraunces',serif;font-size:21px;font-weight:800;letter-spacing:-.01em;margin:8px 0 10px;}
-.layer p{font-size:14px;color:var(--ink-soft);line-height:1.55;}
-.layer ul{list-style:none;margin-top:12px;display:flex;flex-direction:column;gap:9px;}
-.layer li{font-size:13.5px;color:var(--ink-soft);line-height:1.45;display:flex;gap:9px;}
-.layer li::before{content:"";flex:none;width:7px;height:7px;border-radius:50%;margin-top:6px;}
-.layer.soc li::before{background:var(--forest-bd);} .layer.biz li::before{background:var(--gold);} .layer.sci li::before{background:var(--clay);}
-.layer .llink{margin-top:16px;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--clay);}
-.layer .llink:hover{text-decoration:underline;}
+/* who it's for */
+.who{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:stretch;}
+.whocard{border-radius:24px;padding:32px clamp(24px,3vw,36px);box-shadow:var(--shadow);display:flex;flex-direction:column;}
+.whocard.people{background:linear-gradient(165deg,var(--forest-l),var(--paper-3));border:1px solid var(--forest-bd);}
+.whocard.biz{background:linear-gradient(165deg,var(--gold-l),var(--paper-3));border:1px solid #E6CF95;}
+.whocard .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;}
+.whocard.people .tag{color:var(--forest);} .whocard.biz .tag{color:var(--gold-d);}
+.whocard h3{font-family:'Fraunces',serif;font-size:clamp(22px,2.6vw,28px);font-weight:800;letter-spacing:-.01em;margin:8px 0 12px;line-height:1.1;}
+.whocard p{font-size:15px;color:var(--ink-soft);line-height:1.55;margin-bottom:14px;}
+.whocard p b{color:var(--ink);font-weight:700;}
+.whocard ul{list-style:none;display:flex;flex-direction:column;gap:11px;margin:4px 0 24px;}
+.whocard li{display:flex;gap:11px;font-size:14.5px;line-height:1.45;color:var(--ink-soft);}
+.whocard li b{color:var(--ink);font-weight:700;}
+.whocard li .dot{flex:none;width:18px;height:18px;border-radius:6px;display:grid;place-items:center;margin-top:1px;font-size:11px;font-weight:800;}
+.whocard.people .dot{background:#D4E9DE;color:var(--forest-d);}
+.whocard.biz .dot{background:#EFDDB0;color:var(--gold-d);}
+.whocard .btn{align-self:flex-start;margin-top:auto;}
 
 /* final cta */
-.final{text-align:center;background:linear-gradient(150deg,var(--forest-l),var(--paper-3) 55%,var(--gold-l));border:1px solid var(--forest-bd);border-radius:28px;padding:clamp(48px,7vw,80px) clamp(24px,4vw,48px);box-shadow:var(--shadow-lg);}
+.final{text-align:center;background:linear-gradient(150deg,var(--forest-l),var(--paper-3) 55%,var(--gold-l));border:1px solid var(--forest-bd);border-radius:28px;padding:clamp(46px,6vw,76px) clamp(24px,4vw,48px);box-shadow:var(--shadow-lg);}
 .final .fl{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--forest);font-weight:600;}
-.final h2{font-family:'Fraunces',serif;font-weight:800;letter-spacing:-.02em;line-height:1.04;font-size:clamp(34px,5.4vw,60px);margin:14px 0 16px;}
+.final h2{font-family:'Fraunces',serif;font-weight:800;letter-spacing:-.02em;line-height:1.04;font-size:clamp(30px,4.8vw,52px);margin:12px 0 14px;}
 .final h2 em{font-style:italic;color:var(--gold-d);}
-.final p{font-size:clamp(16px,1.9vw,19px);color:var(--ink-soft);max-width:54ch;margin:0 auto 30px;line-height:1.55;}
+.final p{font-size:clamp(15.5px,1.8vw,18px);color:var(--ink-soft);max-width:52ch;margin:0 auto 28px;line-height:1.55;}
 .final .hero-cta{justify-content:center;margin-top:0;}
-.final .tag{margin-top:26px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.04em;color:var(--ink-soft);}
+.final .tag{margin-top:24px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.04em;color:var(--ink-soft);}
 .final .tag b{color:var(--forest-d);}
 
-footer{position:relative;z-index:2;text-align:center;padding:40px 20px 56px;color:var(--ink-faint);font-size:12.5px;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em;}
+footer{position:relative;z-index:2;text-align:center;padding:38px 20px 54px;color:var(--ink-faint);font-size:12.5px;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em;}
 footer .brand{justify-content:center;margin-bottom:14px;}
 
 /* reveal + load */
-.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
 .reveal.in{opacity:1;transform:none;}
 .reveal.d1{transition-delay:.08s;} .reveal.d2{transition-delay:.16s;} .reveal.d3{transition-delay:.24s;}
-.hl{opacity:0;transform:translateY(20px);animation:rise .8s var(--ease) forwards;}
+.hl{opacity:0;transform:translateY(18px);animation:rise .8s var(--ease) forwards;}
 .hl.h1{animation-delay:.05s;} .hl.h2{animation-delay:.16s;} .hl.h3{animation-delay:.28s;}
 .hl.h4{animation-delay:.4s;} .hl.h5{animation-delay:.52s;}
 @keyframes rise{to{opacity:1;transform:none;}}
-.grow{stroke-dasharray:1;stroke-dashoffset:0;}
 @media(prefers-reduced-motion:reduce){.reveal,.hl{opacity:1!important;transform:none!important;animation:none!important;}}
 
-@media(max-width:920px){
-  .land-grid,.build{grid-template-columns:1fr;}
-  .layers{grid-template-columns:1fr;}
+@media(max-width:880px){
+  .steps{grid-template-columns:1fr;} .step .arr{display:none;}
+  .who{grid-template-columns:1fr;}
   .nav-links a:not(.btn){display:none;}
 }
 @media(max-width:600px){
-  .crow{grid-template-columns:1fr;}
-  .crow .old,.crow .new{border-left:none;border-top:1px solid var(--line-2);}
-  .crow.head{display:none;}
-  .crow .dim::before{content:"vs · ";color:var(--ink-faint);}
   .nav-demos{gap:6px;} .nav-demos .btn{padding:8px 12px;font-size:12px;}
 }
 </style>
@@ -200,9 +164,9 @@ footer .brand{justify-content:center;margin-bottom:14px;}
 <nav>
   <a class="brand" href="#top"><span class="mark"></span><span class="name">Pop<span>land</span></span></a>
   <div class="nav-links">
-    <a href="#manifesto">Manifesto</a>
-    <a href="#build">Your Popie</a>
-    <a href="#land">The land</a>
+    <a href="#how">How it works</a>
+    <a href="#people">For people</a>
+    <a href="#business">For business</a>
     <span class="nav-demos">
       <a class="btn btn-primary" href="https://joyceqx.github.io/popland-demo/#both" target="_blank" rel="noopener">Consumer ↗</a>
       <a class="btn btn-gold" href="https://joyceqx.github.io/popland-demo/b-end/" target="_blank" rel="noopener">Business ↗</a>
@@ -213,213 +177,80 @@ footer .brand{justify-content:center;margin-bottom:14px;}
 <!-- HERO -->
 <header class="hero" id="top">
   <div class="wrap inner">
-    <span class="eyebrow hl h1">Popland · Vision 2.0 · the connector, not the replacement</span>
-    <h1 class="hl h2">In the age of AI, <em>become more yourself.</em><br/>And let it count.</h1>
-    <p class="lede hl h3">AI keeps telling you that you are about to be replaced. Popland is the opposite bet. We do not copy what you can do. We grow the part of you that cannot be copied, <b>your values, your taste, your judgment,</b> into a living persona that represents you and acts in your name. We call it your Popie.</p>
+    <span class="eyebrow hl h1">Popland</span>
+    <h1 class="hl h2">A voice for every person.<br/><em>Real insight for every business.</em></h1>
+    <p class="lede hl h3">Popland builds you a personal AI, a <b>Popie</b>, from the preferences you share with us. Your Popie speaks for you in the products, brands, and decisions you care about, so businesses learn what people really want, and people finally get a say. <b>We don't replace you. We get you heard.</b></p>
     <span class="hero-demos-label hl h4">See it live · both sides</span>
     <div class="hero-cta hl h4">
       <a class="btn btn-primary" href="https://joyceqx.github.io/popland-demo/#both" target="_blank" rel="noopener">Consumer app demo ↗</a>
       <a class="btn btn-gold" href="https://joyceqx.github.io/popland-demo/b-end/" target="_blank" rel="noopener">Business demo ↗</a>
     </div>
-    <a class="hero-jump hl h4" href="#manifesto">Read the manifesto ↓</a>
+    <a class="hero-jump hl h4" href="#how">See how it works ↓</a>
     <div class="hero-meta hl h5">
-      <span>Connector, not replacement</span>
-      <span>Values over skills</span>
-      <span>Meaning before money</span>
+      <span>Built from real people</span>
+      <span>You stay in control</span>
+      <span>Heard, not replaced</span>
     </div>
   </div>
 </header>
 
-<!-- MANIFESTO BAND -->
-<section class="manifesto-wrap" id="manifesto">
+<!-- MISSION -->
+<section class="mission">
+  <div class="wrap reveal">
+    <div class="ml">Our mission</div>
+    <p>In the age of AI, no one should be replaced. <em>Everyone should be heard.</em></p>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="pad" id="how" style="padding-top:0;">
   <div class="wrap">
-    <div class="manifesto reveal">
-      <svg class="wind" viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true">
-        <g fill="none" stroke="#D99A2B" stroke-width="2" stroke-linecap="round">
-          <path d="M-20 90 C 260 30, 520 150, 820 70 S 1240 70, 1240 70" opacity=".5"/>
-          <path d="M-20 180 C 300 110, 560 230, 880 150 S 1240 150, 1240 150" opacity=".35"/>
-          <path d="M-20 280 C 240 220, 540 330, 860 250 S 1240 250, 1240 250" opacity=".25"/>
-        </g>
-      </svg>
-      <div class="inner2">
-        <div class="ml">The manifesto</div>
-        <blockquote>You cannot argue with the wind. You can only decide whether to raise a sail, and <em>where to point it.</em></blockquote>
-        <p class="sup">AI is the wind of our age. It blows whether we welcome it or not. <b>The question was never whether. It was who it serves.</b> Most of AI wants to copy what you can do, so that one day it can do it without you. Popland points the sail the other way: back toward the person.</p>
-      </div>
+    <div class="shead reveal">
+      <div class="idx">How it works</div>
+      <h2>From what you care about, <em>to a voice that counts.</em></h2>
+      <p>Popland connects two sides: people who share their real preferences, and businesses who want to understand them. Here is the whole loop, in three steps.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal d1"><div class="n">1</div><h3>Build your Popie</h3><p>Share your real preferences, a little at a time. Popland turns them into <b>your Popie</b>, a personal AI that represents you.</p><span class="arr">→</span></div>
+      <div class="step reveal d2"><div class="n">2</div><h3>Your Popie speaks for you</h3><p>Choose the areas you want a say in. When a business wants to understand people, <b>your Popie answers in your place, in your interest.</b></p><span class="arr">→</span></div>
+      <div class="step reveal d3"><div class="n">3</div><h3>Heard, and understood</h3><p>You get a voice in the decisions that affect you. Businesses get <b>honest, current insight from real people,</b> not guesses.</p></div>
     </div>
   </div>
 </section>
 
-<!-- WHAT WE BUILD: POPIE -->
-<section class="pad" id="build">
+<!-- WHO IT'S FOR -->
+<section class="pad" id="who" style="padding-top:0;">
   <div class="wrap">
     <div class="shead reveal">
-      <div class="idx">01 / What we build</div>
-      <h2>We don't distill you. <em>We represent you.</em></h2>
-      <p>Skills are the part of you that AI can copy and make redundant. Your values and judgment are the part it cannot, the irreducible core of a person. That is what your Popie models.</p>
+      <div class="idx">Who it's for</div>
+      <h2>Two sides, <em>one simple idea.</em></h2>
+      <p>People lend their real preferences. Businesses ask, and finally understand. Popland is the bridge between them.</p>
     </div>
-    <div class="build">
-      <div class="copy reveal d1">
-        <p>Your <b>Popie</b> is a living persona that learns what you value and how you decide, not what you can do, and acts in your name. The better it knows you, <b>the more you matter, not less,</b> because it has to keep coming back to ask you.</p>
-        <p><b>Calibration is the product.</b> Teaching your Popie to think like you is the experience of being understood, and of being represented. It is not a chore you endure for a payout.</p>
-        <div class="note-card">
-          <p><b>The Fidelity Score</b> measures how faithfully your Popie reflects you. You cannot fake your way to a higher score. You can only be more honestly yourself, which is exactly the data we need. Honesty is the whole point.</p>
-        </div>
-      </div>
-      <div class="viz-card reveal d2">
-        <svg viewBox="0 0 460 230" role="img" aria-label="A Popie growing from a seed to a flourishing plant as fidelity rises">
-          <line x1="30" y1="186" x2="430" y2="186" stroke="#A9D2C2" stroke-width="2" stroke-linecap="round"/>
-          <!-- stage 1: seed -->
-          <g>
-            <circle cx="90" cy="178" r="7" fill="#D99A2B"/>
-            <path d="M90 178 q4 -10 12 -12" fill="none" stroke="#5AA988" stroke-width="3" stroke-linecap="round"/>
-          </g>
-          <!-- stage 2: sprout -->
-          <g>
-            <path d="M230 186 L230 120" stroke="#1F6E5A" stroke-width="3.5" stroke-linecap="round"/>
-            <path d="M230 138 q-26 -6 -34 -28 q24 -2 34 18" fill="#5AA988"/>
-            <path d="M230 126 q26 -8 36 -30 q-24 0 -36 22" fill="#6FB89A"/>
-          </g>
-          <!-- stage 3: flourishing -->
-          <g>
-            <path d="M370 186 L370 70" stroke="#1F6E5A" stroke-width="4" stroke-linecap="round"/>
-            <path d="M370 150 q-32 -8 -42 -34 q30 -2 42 22" fill="#5AA988"/>
-            <path d="M370 132 q32 -10 44 -36 q-30 0 -44 26" fill="#6FB89A"/>
-            <path d="M370 104 q-28 -8 -36 -30 q26 -2 36 18" fill="#5AA988"/>
-            <circle cx="370" cy="66" r="9" fill="#D99A2B"/>
-            <circle cx="370" cy="66" r="9" fill="none" stroke="#A9761A" stroke-width="1.5" opacity=".5"/>
-          </g>
-          <!-- fidelity arrow -->
-          <g font-family="'IBM Plex Mono',monospace" font-size="10" fill="#54605A">
-            <text x="62" y="212">low</text>
-            <text x="340" y="212">high fidelity</text>
-          </g>
-          <path d="M40 206 L420 206" stroke="#D99A2B" stroke-width="1.5" stroke-dasharray="2 5" opacity=".6"/>
-        </svg>
-        <div class="viz-cap">Your Popie grows as you calibrate. <b>The truer it is, the more it can do in your name.</b></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- VALUES OVER SKILLS -->
-<section class="pad" id="different" style="padding-top:0;">
-  <div class="wrap">
-    <div class="shead reveal">
-      <div class="idx">02 / Why this is the opposite</div>
-      <h2>Distillation copies you. <em>Representation keeps you.</em></h2>
-      <p>Most of the AI economy is quietly in the distillation business: extract what you can do, so the system can do it without you. We are built on the opposite premise.</p>
-    </div>
-    <div class="compare reveal d1">
-      <div class="crow head">
-        <div class="dim">Dimension</div>
-        <div class="old">Distillation · most of AI</div>
-        <div class="new">Representation · Popland</div>
-      </div>
-      <div class="crow">
-        <div class="dim">What it wants</div>
-        <div class="old">Your skills, output, and craft</div>
-        <div class="new">Your values, taste, and judgment</div>
-      </div>
-      <div class="crow">
-        <div class="dim">What it does</div>
-        <div class="old">Learns to do it without you</div>
-        <div class="new">Acts in your name, and keeps asking you</div>
-      </div>
-      <div class="crow">
-        <div class="dim">Where you end up</div>
-        <div class="old">Needed less the better it works</div>
-        <div class="new">Needed more, because the model has to stay close to you</div>
-      </div>
-      <div class="crow">
-        <div class="dim">Your data</div>
-        <div class="old">Scraped; you become the product</div>
-        <div class="new">Consented and alive; you stay the principal</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- POPLAND IS A LAND -->
-<section class="pad land" id="land" style="padding-top:0;">
-  <div class="wrap">
-    <div class="shead reveal">
-      <div class="idx">03 / Why people come</div>
-      <h2>Popland is, almost literally, <em>a land.</em></h2>
-      <p>A place where Popies grow, and in growing, help their owners become more themselves and do more of what they care about. We attract people with meaning, self-knowledge, and being seen. Money is a garnish, never the headline.</p>
-    </div>
-    <div class="land-grid">
-      <div class="lcard reveal d1">
-        <div class="lic">🗳️</div>
-        <h3>Be represented</h3>
-        <p>For the first time, the decisions that shape your life can listen to <b>your real preferences and judgment,</b> not your demographic label.</p>
-      </div>
-      <div class="lcard reveal d1">
-        <div class="lic">🌱</div>
-        <h3>Do good in your name</h3>
-        <p>Your Popie can answer for a cause you believe in, or route a little value to it. We can <b>plant a tree, in a desert, that carries your name,</b> the way Ant Forest did for a generation.</p>
-      </div>
-      <div class="lcard reveal d2">
-        <div class="lic">🪞</div>
-        <h3>Know yourself</h3>
-        <p>The calibration loop is a mirror. Over time it shows you <b>your own values, your consistency, and how you change.</b></p>
-      </div>
-      <div class="lcard reveal d2">
-        <div class="lic">🏅</div>
-        <h3>Grow and be seen</h3>
-        <p>Popies visibly grow. Badges, certificates, real mail, and communities that act together. <b>Every reward rewards honesty, not gaming.</b></p>
-      </div>
-    </div>
-    <div class="land-foot reveal">
-      <svg class="tree" width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="A tree planted on a small mound of land with a name tag">
-        <ellipse cx="60" cy="108" rx="46" ry="9" fill="#E3EFE9"/>
-        <rect x="56" y="74" width="8" height="30" rx="3" fill="#C2683F"/>
-        <circle cx="60" cy="52" r="26" fill="#1F6E5A"/>
-        <circle cx="40" cy="60" r="18" fill="#5AA988"/>
-        <circle cx="80" cy="60" r="18" fill="#46987F"/>
-        <circle cx="60" cy="40" r="16" fill="#6FB89A"/>
-        <line x1="86" y1="56" x2="98" y2="50" stroke="#A9761A" stroke-width="1.5"/>
-        <rect x="96" y="44" width="20" height="13" rx="3" fill="#D99A2B"/>
-        <line x1="100" y1="51" x2="112" y2="51" stroke="#3a2a08" stroke-width="1.2" opacity=".5"/>
-      </svg>
-      <div class="ln">In a culture that prizes meaning and prosocial action, that is a stronger reason to show up than money, and a cleaner one.</div>
-    </div>
-  </div>
-</section>
-
-<!-- THREE LAYERS -->
-<section class="pad" id="value" style="padding-top:0;">
-  <div class="wrap">
-    <div class="shead reveal">
-      <div class="idx">04 / Three layers of value</div>
-      <h2>One map of what people value, <em>three kinds of value.</em></h2>
-      <p>Taken at its largest, Popland means something at three levels at once.</p>
-    </div>
-    <div class="layers">
-      <div class="layer soc reveal d1">
-        <span class="lk">To society</span>
-        <h3>A way to matter, on your own terms.</h3>
-        <p>In the age of AI, ordinary people stay in the loop instead of being averaged out.</p>
+    <div class="who">
+      <!-- C-end -->
+      <div class="whocard people reveal d1" id="people">
+        <span class="tag">For people</span>
+        <h3>Turn what you care about into a voice.</h3>
+        <p>You deserve a say in the products you buy and the decisions that shape your life, instead of being reduced to your age and zip code.</p>
         <ul>
-          <li>Representation in the decisions that shape your life</li>
-          <li>Meaning and real-world impact through your Popie</li>
-          <li>Self-knowledge from the calibration mirror</li>
+          <li><span class="dot">✓</span><span><b>Build your Popie</b> from your real preferences. It is yours, and you stay in control of it.</span></li>
+          <li><span class="dot">✓</span><span><b>Choose where it speaks for you:</b> a brand's product, a price, a public issue you care about.</span></li>
+          <li><span class="dot">✓</span><span><b>Be represented by your actual views.</b> Earn a little or do good in your name if you like, but the point is being heard.</span></li>
         </ul>
+        <a class="btn btn-primary" href="https://joyceqx.github.io/popland-demo/#both" target="_blank" rel="noopener">See the consumer app ↗</a>
       </div>
-      <div class="layer biz reveal d2">
-        <span class="lk">To business</span>
-        <h3>Decision simulation is the wedge.</h3>
-        <p>Ask a sandbox of high-fidelity personas before you ship a product, set a price, or write a campaign. Not "people like this tend to," but "this person likely would." Faster, cheaper, and more accountable than focus groups.</p>
+      <!-- B-end -->
+      <div class="whocard biz reveal d2" id="business">
+        <span class="tag">For business</span>
+        <h3>Understand real users in hours, not weeks.</h3>
+        <p>Knowing what customers want has never mattered more, but surveys, focus groups, and panels are slow, expensive, and stale the moment they end.</p>
+        <p><b>Ask Popland instead.</b> Put your question to a panel of Popies built from real, opted-in people. Test a product, a price, or a message, and get clear, current answers fast, with the reasons behind them.</p>
         <ul>
-          <li>We start with consumer brands and the agencies that serve them</li>
-          <li>Beyond research: values-aligned matching and impact channels</li>
+          <li><span class="dot">✓</span><span><b>Real, consented people,</b> not synthetic profiles or scraped data.</span></li>
+          <li><span class="dot">✓</span><span><b>Continuously updated,</b> so the answer reflects now, not last year.</span></li>
+          <li><span class="dot">✓</span><span><b>Individual answers,</b> not demographic averages.</span></li>
         </ul>
-      </div>
-      <div class="layer sci reveal d3">
-        <span class="lk">To science</span>
-        <h3>The layer AI is missing.</h3>
-        <p>A living, individual-level, causal map of human values, continuously calibrated. Frontier models are aligned to an averaged, anonymous human. We hold the opposite: diverse, consented, real people.</p>
-        <a class="llink" href="https://joyceqx.github.io/popland-demo/b-end/behavior_graph_public.html" target="_blank" rel="noopener">Explore the live behavior graph ↗</a>
+        <a class="btn btn-gold" href="https://joyceqx.github.io/popland-demo/b-end/" target="_blank" rel="noopener">See the business console ↗</a>
       </div>
     </div>
   </div>
@@ -429,9 +260,9 @@ footer .brand{justify-content:center;margin-bottom:14px;}
 <section class="pad" style="padding-top:0;">
   <div class="wrap">
     <div class="final reveal">
-      <div class="fl">This is our answer</div>
-      <h2>Grow your <em>Popie.</em></h2>
-      <p>See it live: the consumer app where people grow their Popie, and the research console where businesses ask them.</p>
+      <div class="fl">See it live</div>
+      <h2>A voice for people. <em>Insight for business.</em></h2>
+      <p>Try both sides: the consumer app where people build their Popie, and the research console where businesses ask them.</p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="https://joyceqx.github.io/popland-demo/#both" target="_blank" rel="noopener">Consumer app demo ↗</a>
         <a class="btn btn-gold" href="https://joyceqx.github.io/popland-demo/b-end/" target="_blank" rel="noopener">Business demo ↗</a>
@@ -443,7 +274,7 @@ footer .brand{justify-content:center;margin-bottom:14px;}
 
 <footer>
   <div class="brand"><span class="mark"></span><span class="name">Pop<span>land</span></span></div>
-  Become more yourself, and let it count. · Vision 2.0 · 2026
+  A voice for every person. Real insight for every business. · 2026
 </footer>
 
 <script>
