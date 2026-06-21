@@ -178,7 +178,7 @@ function fidelity(){
   f += Object.keys(S.completed).length * 3;
   return Math.min(99, Math.round(f));
 }
-const avgPerTask = f => Math.max(1, Math.round(2.5 + f * 0.4167));
+const avgPerTask = f => Math.max(1, Math.round(1 + f * 0.03));
 const MILESTONES = [30,50,70,90,99];
 const nextMilestone = f => MILESTONES.find(m => m > f) || null;
 const activeTier = f => { let t = TIERS[0]; for (const x of TIERS) if (f >= x.min) t = x; return t; };

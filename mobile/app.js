@@ -37,7 +37,7 @@ const TASKS = [
 ];
 
 const PERSONA = {
-  values:['Experiences > things','Quietly steers','Consent-first'],
+  values:['Cares about the environment','Experiences > things','Quietly steers','Consent-first'],
   habits:['Cozy nights in','Adventurous orderer','Texts over calls'],
   interests:['Coffee','Travel','Indie games','Skincare'],
 };
@@ -52,7 +52,7 @@ const S = {
 };
 
 const fidelity = () => Math.min(99, Math.round(S.fidBase + Object.keys(S.answers).length * 3.4));
-const avgPerTask = f => Math.max(1, Math.round(2.5 + f * 0.4167));
+const avgPerTask = f => Math.max(1, Math.round(1 + f * 0.03));
 const openTasks = () => TASKS.filter(t => !S.tasks[t.id]).length;
 
 /* ============================================================ */
