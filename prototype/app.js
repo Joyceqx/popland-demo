@@ -140,6 +140,12 @@ const WALLET = [
   { t:'Calibration bonus',         d:'Last week · fidelity', amt:'+$0.50' },
 ];
 
+const IMPACT = [
+  { t:'Voted down a single-use plastic relaunch',      d:'Daily Brew · pricing sandbox', co2:0.6 },
+  { t:'Backed refillable packaging over new bottles',  d:'Lumi · concept panel',         co2:0.5 },
+  { t:'Chose transit over a new parking lot',          d:'City-planning sandbox',        co2:0.3 },
+];
+
 /* ---------- state ---------- */
 const S = {
   page:'home', buildView:'overview',
@@ -148,6 +154,7 @@ const S = {
   demo:{ dob:'1997-04-12', sex:'Female', loc:'Palo Alto, CA', race:'Asian', edu:'Master’s', work:'Product manager', income:'$100–150k', marital:'Single' },
   answers:{ 0:1, 1:1, 2:1, 3:1, 4:1, 5:2, 6:2, 7:1 },
   interests:['Specialty coffee','Travel','Indie games','Skincare','Hiking & trails'],
+  causes:['The environment','Global warming','Climate change'],
   qIndex:0, interviewEdit:false, connected:{}, links:{}, mbti:'',
   align:{}, alignOffset:0, alignBatch:{}, alignStmtIdx:0, alignStmtRate:0, alignStmtNote:'', alignStmts:{}, alignJustSubmitted:false,
   deepIdx:0, deepAns:{}, deepRate:{}, deepNote:{}, deepRecording:false,
@@ -210,6 +217,7 @@ function renderSidebar(){
     ['explore','Explore', `<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>`],
     ['tasks','Tasks', `<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M9 10h6M9 14h4"/>`],
     ['earnings','Earnings', `<circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3h4"/>`],
+    ['impact','Impact', `<path d="M5 21c0-9 7-16 16-16 0 9-7 16-16 16Z"/><path d="M5 21C9 17 13 14 18 12"/>`],
   ];
   const cur = S.page==='deeptalk' ? 'build' : S.page;
   document.getElementById('sidebar').innerHTML = `
@@ -231,7 +239,7 @@ function renderSidebar(){
 function renderMain(){
   const m = document.getElementById('main');
   let html = S.flow ? flowPage()
-    : ({ home:homePage, build:buildPage, explore:explorePage, tasks:tasksPage, earnings:earningsPage, deeptalk:deepTalkPage })[S.page]();
+    : ({ home:homePage, build:buildPage, explore:explorePage, tasks:tasksPage, earnings:earningsPage, impact:impactPage, deeptalk:deepTalkPage })[S.page]();
   const n = popName();
   if (n && n !== 'Pop') html = html.replace(/\bPop\b/g, () => n);  // rename propagates to every static "Pop" (not "Popland")
   m.innerHTML = html;
@@ -363,6 +371,7 @@ function knowsBlock(){
   const groups = { Values:[], Habits:[], Consumer:[] };
   INTERVIEW.forEach((q,i)=>{ if (S.answers[i]!==undefined && groups[q.cat]) groups[q.cat].push(q.o[S.answers[i]]); });
   let html = '<div class="knows">';
+  if (S.causes && S.causes.length) html += `<div class="kgroup"><span class="kl">Cares about</span><div class="kchips">${S.causes.map(c=>`<span class="chip-fact t">${c}</span>`).join('')}</div></div>`;
   for (const k of ['Values','Habits','Consumer']){
     if (groups[k].length) html += `<div class="kgroup"><span class="kl">${labels[k]}</span><div class="kchips">${groups[k].map(c=>`<span class="chip-fact t">${c}</span>`).join('')}</div></div>`;
   }
@@ -694,6 +703,29 @@ function earningsPage(){
       <span class="ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
       <span class="meta"><span class="t">${p.t}</span><span class="d">${p.d}</span></span><span class="amt">${p.amt}</span></div>`).join('')}</div>
     <p class="center muted" style="font-size:12.5px;margin-top:16px;max-width:52ch;margin-left:auto;margin-right:auto">Payouts grow with your Pop’s fidelity and the scarcity of your profile.</p>
+    <div class="spacer"></div>
+  </div>`;
+}
+
+function impactPage(){
+  const total = IMPACT.reduce((s,x)=>s+x.co2,0);
+  const causes = S.causes || [];
+  const careLine = causes.length ? causes.slice(0,2).join(' and ').toLowerCase() : 'the things that matter to you';
+  return `<div class="stagger">
+    <div class="page-head"><span class="eyebrow">Impact</span><h1 class="display">Heard <em>where you care.</em></h1>
+      <p>You told ${popName()} you care about ${careLine}. So when a study touches them, ${popName()} speaks for you, and we report back what your voice actually changed.</p></div>
+    <div class="earn-hero">
+      <div class="card big"><div class="label">Carbon cut through your ${popName()}</div><div class="amt" style="color:var(--spruce)">${total.toFixed(1)}<small> t CO₂e</small></div>
+        <p class="muted" style="font-size:13px">estimated, across ${IMPACT.length} company decisions your ${popName()} helped steer greener</p></div>
+      <div class="card"><div class="label">Causes you stand for</div>
+        <div class="kchips" style="margin-top:8px">${causes.map(c=>`<span class="chip-fact t">${c}</span>`).join('')}</div>
+        <p class="muted" style="font-size:13px;margin-top:12px">Set these in <b>Your ${popName()}</b>, and your voice follows them.</p></div>
+    </div>
+    <h2 style="font-family:'Fraunces',serif;font-weight:700;font-size:20px;margin-bottom:6px">What your voice changed</h2>
+    <div class="card">${IMPACT.map(x=>`<div class="payout">
+      <span class="ic" style="color:var(--spruce)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21c0-9 7-16 16-16 0 9-7 16-16 16Z"/><path d="M5 21C9 17 13 14 18 12"/></svg></span>
+      <span class="meta"><span class="t">${x.t}</span><span class="d">${x.d}</span></span><span class="amt" style="color:var(--spruce)">${x.co2.toFixed(1)} t CO₂e</span></div>`).join('')}</div>
+    <p class="center muted" style="font-size:12.5px;margin-top:16px;max-width:52ch;margin-left:auto;margin-right:auto">Every figure here is verifiable and reported back to you. If we cannot show why, we do not claim it.</p>
     <div class="spacer"></div>
   </div>`;
 }
